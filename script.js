@@ -227,50 +227,62 @@ async function fetchAdminDetailedData() {
         const res = await fetch(`${CONFIG.SCRIPT_URL}?action=get_admin`);
         const list = await res.json();
         
+        // Dòng 223: Fix lỗi triệt để bằng cách bọc biến u chính xác
         tbody.innerHTML = list.map(u => {
-            // Định nghĩa an toàn các biến từ đối tượng u
             const avatarImg = u.avatar || 'https://i.pravatar.cc/150?u=' + u.id;
             
-            // Tính toán % tiến độ
-            const calc = (curr, goal) => {
+            // Hàm tính % an toàn
+            const getP = (curr, goal) => {
                 const c = Number(curr) || 0;
                 const g = Number(goal) || 0;
                 return g > 0 ? Math.min(100, Math.round((c / g) * 100)) : 0;
             };
 
-            const kP = calc(u.kinah, u.kGoal);
-            const mP = calc(u.meso, u.mGoal);
-            const cP = calc(u.char45, u.cGoal); // Mới: Tiến độ Lv45
+            const kP = getP(u.kinah, u.kGoal);
+            const mP = getP(u.meso, u.mGoal);
+            const cP = getP(u.char45, u.cGoal); // Tiến độ Acc Lv45
 
             return `
             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition dark:text-gray-300 border-b dark:border-gray-700">
                 <td class="p-4">
                     <div class="flex items-center gap-3">
-                        <img src="${avatarImg}" class="w-10 h-10 rounded-full border shadow-sm object-cover">
-                        <span class="font-black">${u.id}</span>
+                        <img src="${avatarImg}" class="w-10 h-10 rounded-full border-2 border-gray-200 object-cover">
+                        <span class="font-black text-gray-800 dark:text-white">${u.id}</span>
                     </div>
                 </td>
                 <td class="p-4 text-xs">
-                    <b class="text-indigo-600">${u.team}</b><br>${u.pc || 'No PC'}
+                    <span class="font-bold text-indigo-600">${u.team}</span><br>
+                    <span class="text-gray-500">${u.pc || 'No PC'}</span>
                 </td>
                 <td class="p-4">
                     <div class="flex justify-between text-[10px] mb-1">
-                        <span>${u.kinah}/${u.kGoal}M</span><span class="font-bold">${kP}%</span>
+                        <span>${u.kinah}M</span><span class="font-bold">${kP}%</span>
                     </div>
                     <div class="w-full bg-gray-200 dark:bg-gray-600 h-1.5 rounded-full">
                         <div class="bg-purple-500 h-1.5 rounded-full" style="width: ${kP}%"></div>
                     </div>
                 </td>
-                <td class="p-4 text-center font-bold text-orange-500">
-                    ${u.char45} <small class="text-gray-400">/ ${u.cGoal}</small>
-                    <div class="w-full bg-gray-100 dark:bg-gray-600 h-1 rounded-full mt-1">
-                        <div class="bg-orange-500 h-1 rounded-full" style="width: ${cP}%"></div>
+                <td class="p-4">
+                    <div class="flex justify-between text-[10px] mb-1">
+                        <span>${u.meso}B</span><span class="font-bold">${mP}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 dark:bg-gray-600 h-1.5 rounded-full">
+                        <div class="bg-green-500 h-1.5 rounded-full" style="width: ${mP}%"></div>
+                    </div>
+                </td>
+                <td class="p-4 text-center">
+                    <div class="flex justify-between text-[10px] mb-1">
+                        <span class="font-bold text-orange-600">${u.char45} / ${u.cGoal} Acc</span>
+                        <span class="font-bold text-orange-600">${cP}%</span>
+                    </div>
+                    <div class="w-full bg-gray-100 dark:bg-gray-600 h-2 rounded-full overflow-hidden border dark:border-gray-700">
+                        <div class="bg-orange-500 h-full transition-all duration-500 ${cP >= 100 ? 'animate-pulse' : ''}" style="width: ${cP}%"></div>
                     </div>
                 </td>
             </tr>`;
         }).join('');
     } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-500">Lỗi: ${e.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-red-500 font-bold">Lỗi tải dữ liệu: ${e.message}</td></tr>`;
     }
 }
 
