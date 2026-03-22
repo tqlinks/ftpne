@@ -1,41 +1,85 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Quản Lý Trại Game</title>
+    <title>Bảng Quản Trị - Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-gray-100 p-6">
-    <div class="max-w-5xl mx-auto">
-        <div class="flex justify-between items-center bg-slate-900 text-white p-6 rounded-2xl shadow-lg mb-6">
-            <div>
-                <h1 class="text-2xl font-bold uppercase tracking-wider"><i class="fas fa-crown text-yellow-400"></i> Bảng Quản Trị Hệ Thống</h1>
-                <p class="text-slate-400 text-sm mt-1">Chỉ dành cho Quản lý cấp cao</p>
+<body class="bg-slate-100 dark:bg-gray-900 min-h-screen p-4 md:p-8 transition-colors duration-300">
+    <div class="max-w-6xl mx-auto" id="admin-dashboard">
+        
+        <div class="flex flex-col md:flex-row justify-between items-center bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg mb-8 border dark:border-gray-700">
+            <div class="flex items-center gap-4 mb-4 md:mb-0">
+                <div class="bg-indigo-600 p-4 rounded-xl shadow-inner">
+                    <i class="fas fa-user-shield text-3xl text-yellow-400"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black text-gray-800 dark:text-white uppercase tracking-wider">Hệ Thống Quản Trị</h1>
+                    <p class="text-sm text-green-600 dark:text-green-400 font-bold"><i class="fas fa-circle animate-pulse text-[10px]"></i> Đang truy cập quyền Admin</p>
+                </div>
             </div>
-            <div class="flex gap-4">
-                <a href="register.html" class="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg font-bold">Đăng ký NV</a>
-                <a href="profile.html" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg font-bold">Về Profile</a>
+            <div class="flex gap-3">
+                <button onclick="window.location.assign('profile.html')" class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-5 py-2.5 rounded-xl font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition shadow">
+                    <i class="fas fa-arrow-left"></i> Về Profile
+                </button>
+                <button onclick="logout()" class="bg-red-500 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-red-600 transition shadow">
+                    Đăng Xuất
+                </button>
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-            <table class="w-full text-left border-collapse">
-                <thead class="bg-gray-50 text-gray-700">
-                    <tr>
-                        <th class="p-4 border-b">ID Nhân Viên</th>
-                        <th class="p-4 border-b">Team</th>
-                        <th class="p-4 border-b">Aion 2 (Kinah)</th>
-                        <th class="p-4 border-b">MapleStory (Meso)</th>
-                    </tr>
-                </thead>
-                <tbody id="admin-table">
-                    <tr><td colspan="4" class="p-4 text-center text-gray-500">Đang tải dữ liệu...</td></tr>
-                </tbody>
-            </table>
+        <div class="bg-indigo-50 dark:bg-gray-800/80 p-6 rounded-2xl shadow-md mb-8 border border-indigo-100 dark:border-gray-700">
+            <h2 class="text-lg font-bold text-indigo-800 dark:text-indigo-400 mb-4 uppercase flex items-center gap-2">
+                <i class="fas fa-sliders-h"></i> Điều chỉnh Mục tiêu (KPI) toàn Đội
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-1">Áp dụng cho</label>
+                    <select id="kpi-team" class="w-full p-3 border rounded-xl outline-none bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-indigo-500">
+                        <option value="All">Tất cả nhân viên (All Teams)</option>
+                        <option value="Team A">Chỉ Team A</option>
+                        <option value="Team B">Chỉ Team B</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-1">Mục tiêu Kinah (M)</label>
+                    <input type="number" id="kpi-kinah" placeholder="VD: 3000" class="w-full p-3 border rounded-xl outline-none bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-1">Mục tiêu Meso (B)</label>
+                    <input type="number" id="kpi-meso" placeholder="VD: 1500" class="w-full p-3 border rounded-xl outline-none bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <button onclick="submitTeamGoals()" id="kpi-btn" class="bg-indigo-600 text-white p-3 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg w-full">
+                    <i class="fas fa-check-double"></i> CẬP NHẬT KPI
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border dark:border-gray-700">
+            <div class="p-6 border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex justify-between items-center">
+                <h2 class="text-lg font-bold text-gray-800 dark:text-white uppercase"><i class="fas fa-users text-blue-500"></i> Tiến độ Nhân viên chi tiết</h2>
+                <button onclick="fetchAdminDetailedData()" class="text-sm text-blue-600 dark:text-blue-400 hover:underline"><i class="fas fa-sync-alt"></i> Làm mới</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-[800px]">
+                    <thead class="bg-slate-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs uppercase font-black">
+                        <tr>
+                            <th class="p-4 w-1/4">Nhân viên</th>
+                            <th class="p-4 w-1/6">Thông tin</th>
+                            <th class="p-4 w-1/4">Aion 2 (Kinah)</th>
+                            <th class="p-4 w-1/4">MapleStory (Meso)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-table-body" class="divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+                        <tr><td colspan="4" class="p-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin text-2xl mb-2"></i><br>Đang tải dữ liệu...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+
     <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
