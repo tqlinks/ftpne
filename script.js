@@ -83,3 +83,79 @@ window.onload = () => {
     fetchDashboardStats();
     setInterval(fetchDashboardStats, 60000); // Tự động cập nhật mỗi 1 phút
 };
+// XỬ LÝ ĐĂNG NHẬP
+async function handleLogin() {
+    const id = document.getElementById('login-id').value;
+    const pass = document.getElementById('login-pass').value;
+    const btn = document.getElementById('loginBtn');
+
+    if (!id || !pass) return alert("Vui lòng điền đủ thông tin");
+    
+    btn.disabled = true;
+    btn.innerText = "Đang kiểm tra...";
+
+    try {
+        const res = await fetch(`${CONFIG.SCRIPT_URL}?action=login&id=${id}&pass=${pass}`);
+        const data = await res.json();
+        
+        if (data.status === "success") {
+            localStorage.setItem('user', JSON.stringify(data.user));
+            window.location.href = 'profile.html'; // Chuyển hướng sang Profile
+        } else {
+            alert("ID hoặc mật khẩu không chính xác!");
+        }
+    } catch (e) {
+        alert("Lỗi kết nối hệ thống!");
+    } finally {
+        btn.disabled = false;
+        btn.innerText = "ĐĂNG NHẬP";
+    }
+}
+
+// XỬ LÝ CẬP NHẬT SẢN LƯỢNG
+async function updateProduction() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const kinah = document.getElementById('input-kinah').value;
+    const meso = document.getElementById('input-meso').value;
+    const btn = document.getElementById('updateBtn');
+
+    btn.disabled = true;
+    btn.innerText = "Đang lưu...";
+
+    const payload = {
+        action: "update_prod",
+        id: user.id,
+        kinah: kinah,
+        meso: meso
+    };
+
+    // Dùng mode 'no-cors' để gửi dữ liệu nhanh
+    fetch(CONFIG.SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify(payload)
+    }).then(() => {
+        alert("Đã cập nhật sản lượng thành công!");
+        // Cập nhật lại dữ liệu cục bộ
+        user.kinah = kinah;
+        user.meso = meso;
+        localStorage.setItem('user', JSON.stringify(user));
+    }).finally(() => {
+        btn.disabled = false;
+        btn.innerText = "LƯU SẢN LƯỢNG MỚI";
+    });
+}
+
+function loadProfile() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    document.getElementById('p-id').innerText = user.id;
+    document.getElementById('p-team').innerText = user.team;
+    document.getElementById('p-game').innerText = user.game;
+    document.getElementById('input-kinah').value = user.kinah || 0;
+    document.getElementById('input-meso').value = user.meso || 0;
+}
+
+function logout() {
+    localStorage.removeItem('user');
+    window.location.href = 'login.html';
+}
