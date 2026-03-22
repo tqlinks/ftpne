@@ -1015,3 +1015,97 @@ function showGachaResult(pet, tier) {
     modal.classList.add('opacity-100', 'pointer-events-auto');
     modal.children[0].classList.replace('scale-95', 'scale-100');
 }
+// 1. Hàm kiểm tra xem túi đồ đã đầy chưa (Dùng chung)
+function isInventoryFull() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const ownedPets = user && user.pets ? String(user.pets).split(',').filter(id => id !== "") : [];
+    return ownedPets.length >= 10;
+}
+
+// 2. Cập nhật hàm mua Linh thú trong Shop
+async function buyCurrentPet() {
+    if (isInventoryFull()) {
+        alert("⚠️ Túi đồ đã đầy (10/10)! Bạn cần giải phóng linh thú cũ để mua thêm.");
+        return;
+    }
+    // ... (Giữ nguyên phần code fetch và trừ tiền cũ của bạn ở đây)
+}
+
+// 3. Cập nhật hàm Mở Trứng (Gacha)
+async function handleGacha() {
+    if (isInventoryFull()) {
+        alert("⚠️ Túi đồ đã đầy (10/10)! Không thể chứa thêm linh thú mới từ trứng.");
+        return;
+    }
+    // ... (Giữ nguyên phần code random tỷ lệ cũ)
+}
+
+// 4. Cập nhật hàm hiển thị ở Profile
+function renderProfile() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) return;
+
+    const ownedIds = user.pets ? String(user.pets).split(',').filter(id => id !== "") : [];
+    const count = ownedIds.length;
+
+    // Cập nhật thanh sức chứa
+    const slotsEle = document.getElementById('current-slots');
+    const barEle = document.getElementById('inventory-bar');
+    if (slotsEle) slotsEle.innerText = count;
+    if (barEle) {
+        const percent = (count / 10) * 100;
+        barEle.style.width = percent + '%';
+        // Đổi màu nếu sắp đầy
+        barEle.className = `h-full transition-all duration-500 ${count >= 10 ? 'bg-red-500' : count >= 8 ? 'bg-orange-500' : 'bg-indigo-500'}`;
+    }
+
+    const list = document.getElementById('profile-pets-list');
+    if (list) {
+        if (count === 0) {
+            list.innerHTML = `<p class="col-span-full text-center text-gray-400 py-10">Túi đồ trống rỗng...</p>`;
+        } else {
+            list.innerHTML = ownedIds.map(id => {
+                const pet = PET_DATABASE.find(p => p.id === id);
+                if (!pet) return "";
+                return `
+                <div class="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-2xl border dark:border-gray-700 text-center group relative">
+                    <img src="${pet.img}" class="w-16 h-16 mx-auto mb-2 group-hover:scale-110 transition-transform">
+                    <p class="text-[10px] font-black truncate">${pet.name}</p>
+                    <p class="text-[8px] text-indigo-500 font-bold">${pet.element}</p>
+                    
+                    <button onclick="releasePet('${pet.id}')" class="absolute -top-1 -right-1 bg-red-500 text-white w-5 h-5 rounded-full text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>`;
+            }).join('');
+        }
+    }
+}
+
+// 5. Tính năng bổ sung: Thả linh thú (Để dọn túi đồ)
+async function releasePet(petId) {
+    if (!confirm("Bạn có chắc chắn muốn thả linh thú này về tự nhiên không? (Sẽ không được hoàn lại FPE)")) return;
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    let ownedPets = String(user.pets).split(',').filter(id => id !== "");
+    
+    // Tìm và xóa 1 instance của petId
+    const index = ownedPets.indexOf(petId);
+    if (index > -1) {
+        ownedPets.splice(index, 1);
+    }
+
+    user.pets = ownedPets.join(',');
+    localStorage.setItem('user', JSON.stringify(user));
+    
+    // Cập nhật lại giao diện
+    renderProfile();
+    
+    // Cập nhật lên Google Sheets (Action update_pets)
+    try {
+        await fetch(CONFIG.SCRIPT_URL, {
+            method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({ action: "update_pets", id: user.id, pets: user.pets })
+        });
+    } catch (e) { console.error("Lỗi đồng bộ!"); }
+}
