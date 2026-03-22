@@ -391,20 +391,28 @@ async function fetchManageData() {
 }
 
 // 2. Mở Modal và Đổ dữ liệu
+// Dòng 407 fix lỗi toLowerCase
 function openAdminEditModal(targetId) {
-    const user = globalUsersList.find(u => u.id === targetId);
-    if (!user) return;
-
-    setText('edit-m-id', user.id);
-    setText('edit-m-email', user.email);
-    setVal('edit-m-phone', user.phone || '');
-    setVal('edit-m-pc', user.pc || '');
-    setVal('edit-m-team', user.team);
-    setVal('edit-m-game', user.game);
-    setVal('edit-m-role', user.role);
+    // Tìm nhân viên trong danh sách đã tải về
+    const userToEdit = globalUsersList.find(u => String(u.id).trim() === String(targetId).trim());
     
-    // Nếu là lyukikz gốc thì khóa không cho tự hạ quyền mình
-    if (user.email.toLowerCase() === 'lyukikz@gmail.com') {
+    if (!userToEdit) {
+        alert("Không tìm thấy dữ liệu nhân viên này!");
+        return;
+    }
+
+    // Đổ dữ liệu vào Modal
+    setText('edit-m-id', userToEdit.id);
+    setText('edit-m-email', userToEdit.email || "Chưa có email");
+    setVal('edit-m-phone', userToEdit.phone || '');
+    setVal('edit-m-pc', userToEdit.pc || '');
+    setVal('edit-m-team', userToEdit.team);
+    setVal('edit-m-game', userToEdit.game);
+    setVal('edit-m-role', userToEdit.role || 'user');
+    
+    // Kiểm tra an toàn trước khi dùng toLowerCase
+    const userEmail = String(userToEdit.email || "").toLowerCase();
+    if (userEmail === 'lyukikz@gmail.com') {
         document.getElementById('edit-m-role').disabled = true;
     } else {
         document.getElementById('edit-m-role').disabled = false;
@@ -412,8 +420,7 @@ function openAdminEditModal(targetId) {
 
     const modal = document.getElementById('adminEditModal');
     modal.classList.add('opacity-100', 'pointer-events-auto');
-    modal.children[0].classList.remove('scale-95');
-    modal.children[0].classList.add('scale-100');
+    modal.children[0].classList.replace('scale-95', 'scale-100');
 }
 
 function closeAdminEditModal() {
