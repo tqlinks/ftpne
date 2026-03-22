@@ -102,6 +102,11 @@ window.onload = () => {
         if (!user) return window.location.assign('login.html');
         
         setText('p-id', user.id);
+        // THÊM 3 DÒNG NÀY ĐỂ HIỂN THỊ THÔNG TIN MỚI
+        setText('p-email', user.email || "Chưa cập nhật");
+        setText('p-phone', user.phone || "Chưa cập nhật");
+        setText('p-pc', user.pc || "Chưa phân công");
+        
         setText('p-team', user.team);
         setText('p-game', user.game);
         setVal('input-kinah', user.kinah || 0);
@@ -110,7 +115,7 @@ window.onload = () => {
         // HIỆN NÚT "VÀO TRANG ADMIN" NẾU LÀ LYUKIKZ
         if (user.role === 'admin') {
             const adminBtn = document.createElement('button');
-            adminBtn.className = "w-full bg-slate-900 text-white p-3 rounded-xl font-bold mt-4 shadow-lg hover:bg-black transition-all";
+            adminBtn.className = "w-full bg-slate-900 text-white p-3 rounded-xl font-bold mt-4 shadow-lg hover:bg-black transition-all flex items-center justify-center gap-2";
             adminBtn.innerHTML = '<i class="fas fa-user-shield"></i> VÀO TRANG QUẢN TRỊ (ADMIN)';
             adminBtn.onclick = () => window.location.assign('admin.html');
             document.getElementById('updateBtn').after(adminBtn);
