@@ -190,29 +190,27 @@ window.onload = () => {
     if (document.getElementById('stat-total')) fetchStats();
     
     // C. TRANG PROFILE
+    // C. TRANG PROFILE (Hiển thị thông tin người dùng)
     if (document.getElementById('p-id')) {
         const user = JSON.parse(localStorage.getItem('user'));
         if (user) {
-            // Nạp thông tin cơ bản
+            // 1. Nạp thông tin cơ bản
             setText('p-id', user.id);
             setText('p-team', user.team);
             setText('p-game', user.game);
             setText('p-phone', user.phone || "Chưa cập nhật");
             setText('p-pc', user.pc || "Chưa phân công");
+            
+            // 2. Nạp Avatar 
+            const avatarEl = document.getElementById('p-avatar');
+            if (user.avatar) avatarEl.src = user.avatar;
+
+            // 3. Nạp Sản lượng đã nhập
             setVal('input-kinah', user.kinah || 0);
             setVal('input-meso', user.meso || 0);
             setVal('input-char45', user.char45 || 0);
 
-            // ... (Dưới updateProgressBar meso)
-            setText('prog-c-current', user.char45 || 0);
-            setText('prog-c-goal', user.cGoal || 0);
-            updateProgressBar('bar-char45', 'txt-bar-char45', user.char45, user.cGoal);
-            
-            // Nạp Avatar (Mới)
-            const avatarEl = document.getElementById('p-avatar');
-            if (user.avatar) avatarEl.src = user.avatar;
-
-            // Nạp Mục tiêu và Thanh Tiến độ (Mới)
+            // 4. Nạp Mục tiêu và Thanh Tiến độ 
             setText('prog-k-current', user.kinah || 0);
             setText('prog-k-goal', user.kGoal || 0);
             updateProgressBar('bar-kinah', 'txt-bar-kinah', user.kinah, user.kGoal);
@@ -221,16 +219,32 @@ window.onload = () => {
             setText('prog-m-goal', user.mGoal || 0);
             updateProgressBar('bar-meso', 'txt-bar-meso', user.meso, user.mGoal);
 
-            // Nút ADMIN độc quyền của lyukikz (Giữ nguyên)
-            if (user.role === 'admin') {
-                const adminBtn = document.createElement('button');
-                adminBtn.className = "w-full bg-slate-900 dark:bg-black text-white p-3 rounded-xl font-bold mt-4 shadow-lg hover:bg-black transition-all flex items-center justify-center gap-2";
-                adminBtn.innerHTML = '<i class="fas fa-user-shield text-yellow-400"></i> TRANG ADMIN';
-                adminBtn.onclick = () => window.location.assign('admin.html');
-                document.getElementById('updateBtn').after(adminBtn);
+            setText('prog-c-current', user.char45 || 0);
+            setText('prog-c-goal', user.cGoal || 0);
+            updateProgressBar('bar-char45', 'txt-bar-char45', user.char45, user.cGoal);
+
+            // ==========================================
+            // 5. NẠP ĐIỂM FPE VÀ KHÓA NÚT ĐIỂM DANH 
+            // ==========================================
+            setText('p-fpe', user.fpe || 0);
+
+            const today = new Date().toLocaleDateString('vi-VN');
+            const btnCheckIn = document.getElementById('btn-checkin');
+            if (btnCheckIn && user.lastCheckIn === today) {
+                btnCheckIn.disabled = true;
+                btnCheckIn.innerHTML = '<i class="fas fa-check-circle"></i> ĐÃ ĐIỂM DANH';
+                btnCheckIn.className = "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-5 py-3 rounded-xl font-black shadow-inner flex items-center gap-2 cursor-not-allowed";
             }
+
+            // 6. Nút ADMIN độc quyền
+            if (user.role === 'admin') {
+                const adminBtn = document.getElementById('admin-panel-btn');
+                if (adminBtn) adminBtn.classList.remove('hidden');
+            }
+            
         } else {
-            window.location.assign('login.html'); // Chưa đăng nhập thì đá
+            // Chưa đăng nhập thì đá về trang login
+            window.location.assign('login.html'); 
         }
     }
 };
