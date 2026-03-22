@@ -630,3 +630,181 @@ async function handleCheckIn() {
         btn.innerHTML = '<i class="fas fa-calendar-check"></i> ĐIỂM DANH';
     }
 }
+// ==========================================
+// KHU VỰC: CỬA HÀNG LINH THÚ (shop.html)
+// ==========================================
+
+const eleColors = {
+    "Hỏa": "bg-red-500", "Thủy": "bg-blue-500", "Phong": "bg-teal-400", 
+    "Thổ": "bg-amber-700", "Lôi": "bg-purple-500", "Ám": "bg-gray-800 text-white",
+    "Quang": "bg-yellow-400 text-yellow-900", "Băng": "bg-cyan-400", "Mộc": "bg-green-500",
+    "Kim": "bg-slate-400", "Độc": "bg-lime-500", "Không Gian": "bg-black text-purple-400 border border-purple-500"
+};
+
+let currentSelectedPet = null;
+let currentFilter = 'All';
+
+// 1. Render danh sách Linh thú có bộ lọc
+function renderShop(filterElement = 'All') {
+    currentFilter = filterElement;
+    const grid = document.getElementById('pet-grid');
+    if (!grid) return;
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    setText('shop-fpe', user ? user.fpe : 0);
+    
+    // Lấy ID pet đã mua
+    const ownedPets = user && user.pets ? String(user.pets).split(',') : [];
+
+    // Cập nhật giao diện nút Filter
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        if (btn.innerText.includes(filterElement) || (filterElement === 'All' && btn.innerText === 'Tất Cả')) {
+            btn.className = "filter-btn shrink-0 bg-yellow-400 text-yellow-900 hover:bg-yellow-500 px-4 py-2 rounded-xl font-bold text-xs transition-colors shadow-md transform scale-105";
+        } else {
+            btn.className = "filter-btn shrink-0 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 px-4 py-2 rounded-xl font-bold text-xs transition-colors";
+        }
+    });
+
+    // Lọc dữ liệu
+    const filteredPets = filterElement === 'All' 
+        ? PET_DATABASE 
+        : PET_DATABASE.filter(p => p.element === filterElement);
+
+    if (filteredPets.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-10 text-gray-500 dark:text-gray-400 font-bold">Chưa có linh thú hệ ${filterElement} nào.</div>`;
+        return;
+    }
+
+    grid.innerHTML = filteredPets.map(pet => {
+        const isOwned = ownedPets.includes(pet.id);
+        const colorClass = eleColors[pet.element] || "bg-gray-500";
+        
+        return `
+        <div onclick="openPetDetails('${pet.id}')" class="pet-card bg-white dark:bg-gray-800 rounded-2xl p-3 border-2 border-transparent dark:border-gray-700 cursor-pointer relative overflow-hidden group flex flex-col h-full">
+            ${isOwned ? `<div class="absolute top-2 right-2 bg-green-500 text-white text-[9px] font-black px-2 py-1 rounded-md z-10 shadow"><i class="fas fa-check"></i> ĐÃ CÓ</div>` : ''}
+            
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-2 mb-2 relative flex justify-center items-center h-28 border border-gray-100 dark:border-gray-800">
+                <img src="${pet.img}" alt="${pet.name}" class="w-20 h-20 object-contain group-hover:scale-110 transition-transform duration-300 drop-shadow-md">
+                <span class="absolute bottom-1 left-1 ${colorClass} text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">${pet.element}</span>
+            </div>
+            
+            <div class="flex-grow flex flex-col justify-between">
+                <div>
+                    <h3 class="font-black text-gray-800 dark:text-white text-sm truncate" title="${pet.name}">${pet.name}</h3>
+                    <p class="text-[10px] text-gray-500 dark:text-gray-400">Mã: ${pet.id}</p>
+                </div>
+                <div class="mt-2 text-right">
+                    <span class="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 text-xs font-black px-2 py-1 rounded-lg border border-yellow-200 dark:border-yellow-700/50">
+                        ${pet.price} <i class="fas fa-coins text-[10px]"></i>
+                    </span>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// 2. Mở Modal Chi tiết Linh Thú
+function openPetDetails(id) {
+    const pet = PET_DATABASE.find(p => p.id === id);
+    if (!pet) return;
+    
+    currentSelectedPet = pet;
+    const user = JSON.parse(localStorage.getItem('user'));
+    const isOwned = user.pets && String(user.pets).split(',').includes(pet.id);
+    const canAfford = Number(user.fpe) >= pet.price;
+    const colorClass = eleColors[pet.element] || "bg-gray-500";
+
+    const modalContent = document.getElementById('petModalContent');
+    modalContent.innerHTML = `
+        <div class="${colorClass} p-6 relative flex flex-col items-center border-b-4 border-black/20 text-white">
+            <button onclick="closePetModal()" class="absolute top-3 right-3 text-white/70 hover:text-white text-2xl drop-shadow"><i class="fas fa-times-circle"></i></button>
+            <div class="bg-white/20 p-2 rounded-full backdrop-blur-sm border-4 border-white/30 drop-shadow-xl mb-3">
+                <img src="${pet.img}" class="w-24 h-24 object-contain">
+            </div>
+            <h2 class="text-xl font-black uppercase tracking-wider text-center">${pet.name}</h2>
+            <div class="flex gap-2 mt-2">
+                <span class="bg-black/40 text-[10px] px-3 py-1 rounded-full font-bold uppercase border border-white/20">Hệ: ${pet.element}</span>
+                <span class="bg-black/40 text-[10px] px-3 py-1 rounded-full font-bold uppercase border border-white/20">ID: ${pet.id}</span>
+            </div>
+        </div>
+        
+        <div class="p-5 bg-slate-50 dark:bg-gray-800">
+            <p class="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1"><i class="fas fa-chart-bar"></i> Chỉ số Cơ bản</p>
+            <div class="grid grid-cols-3 gap-2 text-[11px] font-bold mb-4">
+                <div class="bg-red-50 dark:bg-red-900/20 p-2 rounded border border-red-100 dark:border-red-800/50 text-red-600 dark:text-red-400 flex flex-col"><span class="text-[9px] text-gray-500 mb-0.5">HP</span><span><i class="fas fa-heart"></i> ${pet.stats.hp}</span></div>
+                <div class="bg-blue-50 dark:bg-blue-900/20 p-2 rounded border border-blue-100 dark:border-blue-800/50 text-blue-600 dark:text-blue-400 flex flex-col"><span class="text-[9px] text-gray-500 mb-0.5">MP</span><span><i class="fas fa-tint"></i> ${pet.stats.mp}</span></div>
+                <div class="bg-orange-50 dark:bg-orange-900/20 p-2 rounded border border-orange-100 dark:border-orange-800/50 text-orange-600 dark:text-orange-400 flex flex-col"><span class="text-[9px] text-gray-500 mb-0.5">ATK</span><span><i class="fas fa-khanda"></i> ${pet.stats.atk}</span></div>
+                <div class="bg-gray-200 dark:bg-gray-700 p-2 rounded border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 flex flex-col"><span class="text-[9px] text-gray-500 mb-0.5">DEF</span><span><i class="fas fa-shield-alt"></i> ${pet.stats.def}</span></div>
+                <div class="bg-yellow-50 dark:bg-yellow-900/20 p-2 rounded border border-yellow-100 dark:border-yellow-800/50 text-yellow-600 dark:text-yellow-400 flex flex-col"><span class="text-[9px] text-gray-500 mb-0.5">CRIT</span><span><i class="fas fa-bolt"></i> ${pet.stats.crit}%</span></div>
+                <div class="bg-purple-50 dark:bg-purple-900/20 p-2 rounded border border-purple-100 dark:border-purple-800/50 text-purple-600 dark:text-purple-400 flex flex-col"><span class="text-[9px] text-gray-500 mb-0.5">DMG</span><span><i class="fas fa-burn"></i> ${pet.stats.dmg}%</span></div>
+            </div>
+
+            <p class="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1"><i class="fas fa-arrow-up"></i> Tăng Trưởng (Mỗi Cấp)</p>
+            <div class="flex justify-between text-[10px] font-bold text-gray-600 dark:text-gray-300 mb-4 bg-white dark:bg-gray-700 p-2.5 rounded-lg border dark:border-gray-600 shadow-sm">
+                <span class="text-red-500">+${pet.growth.hp} HP</span>
+                <span class="text-blue-500">+${pet.growth.mp} MP</span>
+                <span class="text-orange-500">+${pet.growth.atk} ATK</span>
+                <span class="text-gray-500">+${pet.growth.def} DEF</span>
+            </div>
+
+            <div class="bg-indigo-50 dark:bg-indigo-900/20 p-3 rounded-xl border border-indigo-100 dark:border-indigo-800 mb-5 relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 opacity-10"><i class="fas fa-star text-6xl text-indigo-500"></i></div>
+                <p class="text-[10px] font-black text-indigo-800 dark:text-indigo-400 uppercase tracking-widest mb-1 relative z-10">Kỹ Năng Kích Hoạt</p>
+                <p class="text-sm font-bold text-gray-700 dark:text-gray-300 relative z-10 leading-snug">"${pet.skill}"</p>
+            </div>
+
+            ${isOwned ? 
+                `<button disabled class="w-full bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 py-3.5 rounded-xl font-black cursor-not-allowed border dark:border-gray-600 flex justify-center items-center gap-2"><i class="fas fa-lock"></i> ĐÃ SỞ HỮU</button>` : 
+             canAfford ? 
+                `<button id="btn-buy-pet" onclick="buyCurrentPet()" class="w-full bg-gradient-to-r from-yellow-400 to-orange-500 text-white py-3.5 rounded-xl font-black hover:from-yellow-500 hover:to-orange-600 shadow-lg shadow-orange-500/30 active:scale-95 transition-all flex justify-center items-center gap-2 border border-orange-400">CHIÊU MỘ - ${pet.price} <i class="fas fa-coins"></i></button>` :
+                `<button disabled class="w-full bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400 py-3.5 rounded-xl font-black cursor-not-allowed border border-red-200 dark:border-red-800 flex justify-center items-center gap-2"><i class="fas fa-exclamation-triangle"></i> THIẾU FPE</button>`
+            }
+        </div>
+    `;
+
+    const modal = document.getElementById('petModal');
+    modal.classList.add('opacity-100', 'pointer-events-auto');
+    modal.children[0].classList.replace('scale-95', 'scale-100');
+}
+
+function closePetModal() {
+    const modal = document.getElementById('petModal');
+    modal.classList.remove('opacity-100', 'pointer-events-auto');
+    modal.children[0].classList.replace('scale-100', 'scale-95');
+}
+
+// 3. Xử lý mua
+async function buyCurrentPet() {
+    if (!currentSelectedPet) return;
+    const user = JSON.parse(localStorage.getItem('user'));
+    const btn = document.getElementById('btn-buy-pet');
+    
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ĐANG KHẾ ƯỚC...';
+
+    try {
+        const res = await fetch(CONFIG.SCRIPT_URL, {
+            method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({ action: "buy_pet", id: user.id, petId: currentSelectedPet.id, price: currentSelectedPet.price })
+        });
+        
+        user.fpe -= currentSelectedPet.price;
+        user.pets = user.pets ? user.pets + "," + currentSelectedPet.id : currentSelectedPet.id;
+        localStorage.setItem('user', JSON.stringify(user));
+
+        alert(`🎉 KHẾ ƯỚC THÀNH CÔNG!\nBạn đã nhận được linh thú [${currentSelectedPet.name}]!`);
+        closePetModal();
+        renderShop(currentFilter); // Giữ nguyên bộ lọc sau khi mua
+    } catch (e) {
+        alert("Lỗi kết nối máy chủ! Không thể chiêu mộ.");
+        btn.disabled = false;
+        btn.innerHTML = `CHIÊU MỘ - ${currentSelectedPet.price} FPE`;
+    }
+}
+
+// Khởi tạo trang shop
+const oldShopOnload = window.onload;
+window.onload = () => {
+    if (oldShopOnload) oldShopOnload();
+    if (document.getElementById('pet-grid')) renderShop();
+};
