@@ -367,6 +367,7 @@ window.onload = () => {
 let globalUsersList = []; // Lưu tạm danh sách để dễ lấy dữ liệu đổ vào Modal
 
 // 1. Tải danh sách thành viên lên bảng
+// Căn chỉnh lại giao diện 6 cột cho Manage.html
 async function fetchManageData() {
     const tbody = document.getElementById('manage-table-body');
     if (!tbody) return;
@@ -377,35 +378,53 @@ async function fetchManageData() {
         
         tbody.innerHTML = globalUsersList.map(u => {
             const avatarImg = u.avatar || 'https://i.pravatar.cc/150?u=' + u.id;
+            
+            // Huy hiệu phân quyền
+            const roleBadge = u.role === 'admin' 
+                ? `<span class="px-3 py-1 bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400 text-[10px] font-bold rounded-full border border-red-200 dark:border-red-800"><i class="fas fa-crown"></i> Admin</span>`
+                : `<span class="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 text-[10px] font-bold rounded-full border border-gray-200 dark:border-gray-600">User</span>`;
+
             return `
             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition dark:text-gray-300 border-b dark:border-gray-700">
                 <td class="p-4">
                     <div class="flex items-center gap-3">
-                        <img src="${avatarImg}" class="w-10 h-10 rounded-full border shadow-sm object-cover">
+                        <img src="${avatarImg}" class="w-10 h-10 rounded-full border-2 border-gray-200 dark:border-gray-600 object-cover shadow-sm">
                         <div>
-                            <p class="font-black">${u.id}</p>
-                            <p class="text-[10px] text-gray-500">${u.email}</p>
+                            <p class="font-black text-gray-800 dark:text-white">${u.id}</p>
+                            <p class="text-[10px] text-gray-500">${u.email || 'Chưa cập nhật'}</p>
                         </div>
                     </div>
                 </td>
+                
                 <td class="p-4 text-xs">
-                    <i class="fas fa-desktop text-indigo-500"></i> <b>${u.pc || '---'}</b><br>
-                    <i class="fas fa-users text-gray-400"></i> ${u.team}
+                    <p class="mb-1"><i class="fas fa-phone-alt text-gray-400 w-4"></i> ${u.phone || '---'}</p>
+                    <p class="font-bold text-indigo-600 dark:text-indigo-400"><i class="fas fa-desktop text-gray-400 w-4"></i> ${u.pc || 'Chưa xếp máy'}</p>
                 </td>
+                
+                <td class="p-4 text-xs">
+                    <p class="font-bold text-gray-700 dark:text-gray-300 mb-1"><i class="fas fa-users text-gray-400 w-4"></i> ${u.team || '---'}</p>
+                    <p class="font-medium text-orange-500"><i class="fas fa-gamepad text-gray-400 w-4"></i> ${u.game || '---'}</p>
+                </td>
+                
                 <td class="p-4 text-center">
-                    <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded font-bold">
-                        ${u.char45 || 0} Lv45
+                    <span class="bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 px-2 py-1 rounded font-bold text-xs border border-orange-200 dark:border-orange-800">
+                        ${u.char45 || 0}
                     </span>
                 </td>
+                
                 <td class="p-4 text-center">
-                    <button onclick="openAdminEditModal('${u.id}')" class="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-md">
-                        <i class="fas fa-edit"></i> Sửa
+                    ${roleBadge}
+                </td>
+                
+                <td class="p-4 text-center">
+                    <button onclick="openAdminEditModal('${u.id}')" class="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 px-3 py-1.5 rounded-lg font-bold transition text-xs shadow-sm border border-indigo-100 dark:border-indigo-800">
+                        <i class="fas fa-user-edit"></i> Sửa
                     </button>
                 </td>
             </tr>`;
         }).join('');
     } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center">Lỗi tải dữ liệu</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-red-500 font-bold">Lỗi tải dữ liệu: ${e.message}</td></tr>`;
     }
 }
 
