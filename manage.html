@@ -31,9 +31,16 @@
         </div>
 
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border dark:border-gray-700">
-            <div class="p-6 border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex justify-between items-center">
-                <h2 class="text-lg font-bold text-gray-800 dark:text-white uppercase">Danh sách Đội ngũ</h2>
-                <button onclick="fetchManageData()" class="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"><i class="fas fa-sync-alt"></i> Tải lại</button>
+           <div class="p-6 border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex justify-between items-center">
+                <h2 class="text-lg font-bold text-gray-800 dark:text-white uppercase"><i class="fas fa-list text-indigo-500"></i> Danh sách Đội ngũ</h2>
+                <div class="flex gap-3">
+                    <button onclick="createNewTeam()" class="text-sm bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-lg font-bold shadow transition flex items-center gap-1">
+                        <i class="fas fa-plus-circle"></i> Tạo Team Mới
+                    </button>
+                    <button onclick="fetchManageData()" class="text-sm text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">
+                        <i class="fas fa-sync-alt"></i> Tải lại
+                    </button>
+                </div>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[900px]">
