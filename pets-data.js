@@ -6,7 +6,7 @@
 
 const PET_DATABASE = [
     // --- BẬC D: TÂN THỦ (Giá: 30 - 50 FPE) ---
-    { id: "P001", name: "Hỏa Long Nhí", element: "Hỏa", price: 30, img: "Pinterest Search: Baby fire dragon chibi fantasy art", stats: { hp: 500, mp: 200, atk: 65, def: 30, crit: 10, dmg: 150 }, growth: { hp: 50, mp: 20, atk: 8, def: 3 }, skill: "Long Tức: Gây 200% ST Hỏa lên toàn đội hình địch." },
+    { id: "P001", name: "Hỏa Long Nhí", element: "Hỏa", price: 30, img: "https://i.pinimg.com/1200x/07/1b/8b/071b8b11c6ee26f9d79ce2e4bc8f085d.jpg", stats: { hp: 500, mp: 200, atk: 65, def: 30, crit: 10, dmg: 150 }, growth: { hp: 50, mp: 20, atk: 8, def: 3 }, skill: "Long Tức: Gây 200% ST Hỏa lên toàn đội hình địch." },
     { id: "P002", name: "Thủy Tinh Linh", element: "Thủy", price: 35, img: "Pinterest Search: Cute water spirit sprite creature art", stats: { hp: 800, mp: 400, atk: 35, def: 45, crit: 5, dmg: 100 }, growth: { hp: 80, mp: 40, atk: 4, def: 5 }, skill: "Suối Nguồn: Hồi phục 25% HP tối đa cho chủ nhân." },
     { id: "P003", name: "Mộc Thụ Chibi", element: "Mộc", price: 30, img: "Pinterest Search: Cute tree creature baby treant art", stats: { hp: 900, mp: 300, atk: 30, def: 55, crit: 5, dmg: 120 }, growth: { hp: 90, mp: 30, atk: 3, def: 7 }, skill: "Quang Hợp: Mỗi lượt tự hồi 10% HP." },
     { id: "P004", name: "Cáo Gió", element: "Phong", price: 40, img: "Pinterest Search: Wind fox fantasy creature kit fox art", stats: { hp: 450, mp: 250, atk: 70, def: 25, crit: 25, dmg: 180 }, growth: { hp: 45, mp: 25, atk: 10, def: 2 }, skill: "Cuồng Phong: Tấn công x3 lần liên tiếp." },
