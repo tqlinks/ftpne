@@ -327,3 +327,12 @@ window.onload = () => {
         fetchAdminDetailedData();
     }
 };
+// Bổ sung nút Admin vào trang Profile (Nếu là Admin)
+    if (document.getElementById('p-id') && user && user.role === 'admin') {
+        // Kiểm tra tránh tạo trùng nút
+        if (!document.getElementById('btn-go-admin')) {
+            const adminBtn = document.createElement('button');
+            // ... (các đoạn code tạo nút) ...
+            document.getElementById('updateBtn').after(adminBtn);
+        }
+    }
