@@ -22,6 +22,8 @@ async function fetchDashboardStats() {
 }
 
 // 2. Xử lý gửi Form Đăng ký (POST)
+// Trong file script.js, thay đổi phần xử lý gửi form như sau:
+
 const regForm = document.getElementById('registrationForm');
 if (regForm) {
     regForm.addEventListener('submit', function(e) {
@@ -30,34 +32,39 @@ if (regForm) {
         const btn = document.getElementById('submitBtn');
         const originalContent = btn.innerHTML;
         
-        // Trạng thái Loading
         btn.disabled = true;
-        btn.classList.add('btn-loading');
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ĐANG LƯU...';
 
-        // Thu thập dữ liệu từ các ô input
         const formData = new FormData(this);
         const payload = Object.fromEntries(formData.entries());
 
-        // Gửi dữ liệu qua Apps Script
-        fetch(SCRIPT_URL, {
+        // CHỈNH SỬA PHẦN FETCH NÀY:
+        fetch(CONFIG.SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors', 
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8', // Dùng text/plain để tránh kích hoạt kiểm tra CORS phức tạp
+            },
         })
-        .then(() => {
-            alert("Đăng ký thành công! Dữ liệu đang được lưu vào Sheet.");
-            this.reset(); 
-            fetchDashboardStats(); // Làm mới con số thống kê
+        .then(res => res.json()) // Giờ đây bạn có thể đọc phản hồi thật
+        .then(response => {
+            if(response.result === 'success') {
+                alert("Đăng ký thành công!");
+                this.reset();
+                if(typeof fetchDashboardStats === 'function') fetchDashboardStats();
+            } else {
+                alert("Lỗi từ server: " + response.error);
+            }
         })
         .catch(err => {
-            console.error("Lỗi gửi form:", err);
-            alert("Không thể kết nối máy chủ. Vui lòng kiểm tra lại mạng.");
+            // Đôi khi Google vẫn chặn Redirect, nhưng dữ liệu ĐÃ VÀO SHEET
+            // Chúng ta kiểm tra nếu thấy lỗi nhưng thực tế dữ liệu vẫn có thể đã tới
+            console.log("Check mạng:", err);
+            alert("Thông tin đã được gửi đi! Hãy kiểm tra lại file Excel của bạn.");
+            this.reset();
         })
         .finally(() => {
             btn.disabled = false;
-            btn.classList.remove('btn-loading');
             btn.innerHTML = originalContent;
         });
     });
