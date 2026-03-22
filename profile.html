@@ -7,11 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script>
-        // Cấu hình Tailwind hỗ trợ Dark mode dựa trên class
         tailwind.config = { darkMode: 'class' }
     </script>
     <style>
-        /* CSS tùy chỉnh cho thanh tiến độ cho mượt */
         .progress-bar { transition: width 0.4s ease; }
     </style>
 </head>
@@ -57,9 +55,8 @@
 
         <div class="bg-green-50/50 dark:bg-gray-700/50 border border-green-100 dark:border-gray-700 p-5 rounded-xl mb-6 shadow-inner">
             <h3 class="text-xs font-bold text-green-700 dark:text-green-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                <i class="fas fa-bullseye"></i> Mục tiêu & Tiến độ làm việc
+                <i class="fas fa-bullseye"></i> Mục tiêu & Tiến độ
             </h3>
-            
             <div class="space-y-4">
                 <div>
                     <div class="flex justify-between text-xs mb-1.5">
@@ -71,7 +68,6 @@
                         <span id="txt-bar-kinah" class="absolute inset-0 flex items-center justify-center text-[9px] font-black text-white">0%</span>
                     </div>
                 </div>
-
                 <div>
                     <div class="flex justify-between text-xs mb-1.5">
                         <span class="font-bold text-green-700 dark:text-green-400">MapleStory (Meso B)</span>
@@ -87,7 +83,6 @@
 
         <div class="space-y-4">
             <h3 class="font-bold text-gray-700 dark:text-gray-300 uppercase text-sm mb-2 border-l-4 border-green-500 dark:border-green-400 pl-2">Báo Cáo Sản Lượng Mới</h3>
-            
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Kinah M</label>
@@ -102,6 +97,10 @@
             <button id="updateBtn" onclick="updateProduction()" class="w-full bg-green-600 text-white py-4 rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg mt-4 flex items-center justify-center gap-2 text-lg active:scale-95">
                 <i class="fas fa-save"></i> LƯU SẢN LƯỢNG MỚI
             </button>
+
+            <button id="admin-panel-btn" onclick="window.location.assign('admin.html')" class="hidden w-full bg-slate-900 dark:bg-black text-white py-4 rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg mt-4 flex items-center justify-center gap-2 border border-slate-700 text-lg active:scale-95">
+                <i class="fas fa-crown text-yellow-400 text-xl"></i> QUẢN TRỊ HỆ THỐNG (ADMIN)
+            </button>
         </div>
 
     </div>
@@ -114,7 +113,6 @@
             <h2 class="text-xl font-black text-gray-800 dark:text-white uppercase mb-6 flex items-center gap-2">
                 <i class="fas fa-edit text-indigo-500"></i> Cập nhật thông tin
             </h2>
-            
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Số điện thoại</label>
@@ -124,20 +122,18 @@
                     <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">PC Số (VD: PC01)</label>
                     <input type="text" id="edit-pc" class="w-full p-3 border rounded-xl outline-none bg-slate-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-indigo-500">
                 </div>
+                
                 <div class="bg-red-50 dark:bg-red-900/10 p-3 rounded-xl border border-red-100 dark:border-red-800/30">
-                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-300 mb-2">Đổi Ảnh Đại Diện (Avatar)</label>
-                    
-                    <a href="https://www.pinterest.com/search/pins/?q=avatar%20cute&rs=ac&len=6&source_id=ac_g7XfZLPM&eq=avatar&etslf=5661" target="_blank" rel="noopener noreferrer" 
-                       class="w-full bg-[#E60023] hover:bg-[#c3001e] text-white py-2.5 rounded-lg font-bold transition flex items-center justify-center gap-2 mb-3 shadow-md text-sm">
+                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-300 mb-2">Đổi Ảnh Đại Diện</label>
+                    <a href="https://www.pinterest.com/search/pins/?q=avatar%20cute&rs=ac&len=6&source_id=ac_g7XfZLPM&eq=avatar&etslf=5661" target="_blank" rel="noopener noreferrer" class="w-full bg-[#E60023] hover:bg-[#c3001e] text-white py-2.5 rounded-lg font-bold transition flex items-center justify-center gap-2 mb-3 shadow-md text-sm">
                         <i class="fab fa-pinterest text-lg"></i> TÌM ẢNH TRÊN PINTEREST
                     </a>
-                    
-                    <input type="text" id="edit-avatar" class="w-full p-3 border rounded-xl outline-none bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-[#E60023] text-sm" placeholder="Dán link ảnh bạn vừa copy vào đây...">
-                    
+                    <input type="text" id="edit-avatar" class="w-full p-3 border rounded-xl outline-none bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-[#E60023] text-sm" placeholder="Dán link ảnh vào đây...">
                     <p class="text-[10px] text-gray-500 dark:text-gray-400 mt-2 italic flex gap-1">
-                        <i class="fas fa-info-circle mt-0.5"></i> Mẹo: Chuột phải vào ảnh trên Pinterest > Chọn "Sao chép địa chỉ hình ảnh" rồi dán vào ô trên.
+                        <i class="fas fa-info-circle mt-0.5"></i> Mẹo: Chuột phải vào ảnh > Chọn "Sao chép địa chỉ hình ảnh".
                     </p>
                 </div>
+
                 <button onclick="handleUpdateProfile()" class="w-full bg-indigo-600 text-white py-3.5 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg mt-5 flex items-center justify-center gap-2">
                     <i class="fas fa-check-circle"></i> XÁC NHẬN CẬP NHẬT
                 </button>
