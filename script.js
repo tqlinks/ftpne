@@ -808,3 +808,119 @@ window.onload = () => {
     if (oldShopOnload) oldShopOnload();
     if (document.getElementById('pet-grid')) renderShop();
 };
+// ==========================================
+// KHU VỰC: ĐẤU TRƯỜNG LINH THÚ (arena.html)
+// ==========================================
+
+let playerPet = null;
+let enemyPet = null;
+let isBattling = false;
+
+// 1. Tải linh thú bạn đang có
+function loadArena() {
+    const list = document.getElementById('owned-pets-list');
+    if (!list) return;
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    const ownedIds = user && user.pets ? String(user.pets).split(',') : [];
+    
+    if (ownedIds.length === 0) {
+        list.innerHTML = `<p class="text-sm text-gray-500">Bạn chưa có linh thú nào. Hãy vào Shop mua nhé!</p>`;
+        return;
+    }
+
+    const ownedPets = PET_DATABASE.filter(p => ownedIds.includes(p.id));
+    list.innerHTML = ownedPets.map(p => `
+        <div onclick="selectMyPet('${p.id}')" class="shrink-0 cursor-pointer group text-center">
+            <img src="${p.img}" class="w-16 h-16 rounded-full bg-gray-800 border-2 border-transparent group-hover:border-blue-500 transition-all p-1">
+            <p class="text-[9px] mt-1 font-bold text-gray-400 group-hover:text-blue-400">${p.name}</p>
+        </div>
+    `).join('');
+
+    // Tự động chọn linh thú máy ngẫu nhiên
+    selectEnemyPet();
+}
+
+// 2. Chọn linh thú của mình
+function selectMyPet(id) {
+    if (isBattling) return;
+    const pet = PET_DATABASE.find(p => p.id === id);
+    playerPet = { ...pet, currentHp: pet.stats.hp };
+    
+    document.getElementById('p-img').src = pet.img;
+    document.getElementById('p-name').innerText = pet.name;
+    updateHp('p', playerPet.currentHp, pet.stats.hp);
+}
+
+// 3. Chọn đối thủ ngẫu nhiên (Máy)
+function selectEnemyPet() {
+    const randomPet = PET_DATABASE[Math.floor(Math.random() * PET_DATABASE.length)];
+    enemyPet = { ...randomPet, currentHp: randomPet.stats.hp };
+    
+    document.getElementById('e-img').src = randomPet.img;
+    document.getElementById('e-name').innerText = randomPet.name;
+    updateHp('e', enemyPet.currentHp, randomPet.stats.hp);
+}
+
+// 4. Cập nhật thanh máu
+function updateHp(side, current, max) {
+    const percent = Math.max(0, (current / max) * 100);
+    document.getElementById(`${side}-hp-bar`).style.width = percent + '%';
+    document.getElementById(`${side}-hp-text`).innerText = `${current}/${max}`;
+}
+
+// 5. Logic Chiến đấu (Turn-based)
+async function startBattle() {
+    if (!playerPet || isBattling) return alert("Vui lòng chọn linh thú!");
+    
+    isBattling = true;
+    const log = document.getElementById('battle-log');
+    log.innerHTML = `<p class="text-yellow-400 font-bold">--- TRẬN ĐẤU BẮT ĐẦU ---</p>`;
+    
+    while (playerPet.currentHp > 0 && enemyPet.currentHp > 0) {
+        // Lượt của Bạn
+        await attack(playerPet, enemyPet, 'e');
+        if (enemyPet.currentHp <= 0) break;
+        
+        await sleep(1000);
+
+        // Lượt của Máy
+        await attack(enemyPet, playerPet, 'p');
+        if (playerPet.currentHp <= 0) break;
+        
+        await sleep(1000);
+    }
+
+    const winner = playerPet.currentHp > 0 ? "BẠN CHIẾN THẮNG!" : "BẠN ĐÃ THẤT BẠI!";
+    log.innerHTML += `<p class="text-2xl font-black text-center mt-4 ${playerPet.currentHp > 0 ? 'text-green-500' : 'text-red-500'}">${winner}</p>`;
+    isBattling = false;
+}
+
+async function attack(attacker, defender, defSide) {
+    const log = document.getElementById('battle-log');
+    const sideName = defSide === 'e' ? 'Bạn' : 'Đối thủ';
+    
+    // Tính sát thương: (ATK - DEF/2) * (Crit? 2 : 1)
+    let isCrit = Math.random() * 100 < attacker.stats.crit;
+    let damage = Math.max(10, attacker.stats.atk - (defender.stats.def / 2));
+    if (isCrit) damage = Math.round(damage * (attacker.stats.dmg / 100));
+
+    defender.currentHp -= Math.round(damage);
+    updateHp(defSide, defender.currentHp, defender.stats.hp);
+    
+    // Hiệu ứng rung màn hình khi trúng đòn
+    document.getElementById(`${defSide}-side`).classList.add('shake');
+    setTimeout(() => document.getElementById(`${defSide}-side`).classList.remove('shake'), 500);
+
+    log.innerHTML += `<p><span class="text-blue-400 font-bold">${attacker.name}</span> tấn công: <span class="${isCrit ? 'text-red-500 font-black' : 'text-white'}">${Math.round(damage)} ST ${isCrit ? '(CHÍ MẠNG!)' : ''}</span></p>`;
+    log.scrollTop = log.scrollHeight;
+}
+
+function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+// Tự động chạy khi vào arena.html
+const oldArenaOnload = window.onload;
+window.onload = () => {
+    if (oldArenaOnload) oldArenaOnload();
+    if (document.getElementById('owned-pets-list')) loadArena();
+};
