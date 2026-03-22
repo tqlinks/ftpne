@@ -138,16 +138,16 @@ async function updateProduction() {
 
     // Dùng mode 'no-cors' để gửi dữ liệu nhanh
     fetch(CONFIG.SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: JSON.stringify(payload)
-    }).then(() => {
-        alert("Đã cập nhật sản lượng thành công!");
-        // Cập nhật lại dữ liệu cục bộ
-        user.kinah = kinah;
-        user.meso = meso;
-        localStorage.setItem('user', JSON.stringify(user));
-    }).finally(() => {
+    method: 'POST',
+    mode: 'no-cors', // Ép buộc bỏ qua kiểm tra CORS
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(payload)
+})
+.then(() => {
+    alert("Gửi thông tin thành công!");
+    regForm.reset();
+    if(document.getElementById('stat-total')) fetchDashboardStats();
+});.finally(() => {
         btn.disabled = false;
         btn.innerText = "LƯU SẢN LƯỢNG MỚI";
     });
