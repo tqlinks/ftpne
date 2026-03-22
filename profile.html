@@ -3,34 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Báo Cáo Sản Lượng</title>
+    <title>Hồ Sơ Của Tôi</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-gray-100 p-4">
-    <div class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-lg mt-10">
+<body class="bg-slate-100 p-4 min-h-screen">
+    <div class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-xl mt-8">
         
-        <div class="flex justify-between items-center border-b pb-4 mb-4">
+        <div class="flex justify-between items-center border-b border-gray-200 pb-4 mb-5">
             <div>
-                <h2 class="text-xl font-bold text-gray-800">Xin chào, <span id="p-id" class="text-indigo-600">...</span></h2>
-                <p class="text-sm text-gray-500 mt-1">Team: <span id="p-team" class="font-bold">...</span> | Game: <span id="p-game" class="font-bold">...</span></p>
+                <h2 class="text-2xl font-black text-gray-800 uppercase">Hồ Sơ <span id="p-id" class="text-indigo-600">...</span></h2>
+                <p class="text-xs text-green-600 font-bold mt-1"><i class="fas fa-circle text-[8px] animate-pulse"></i> Đang hoạt động</p>
             </div>
-            <button onclick="logout()" class="text-red-500 font-bold hover:underline px-2 py-1 bg-red-50 rounded-lg">Thoát</button>
+            <button onclick="logout()" class="text-red-500 font-bold hover:bg-red-50 px-3 py-2 rounded-lg transition-all"><i class="fas fa-sign-out-alt"></i> Thoát</button>
+        </div>
+
+        <div class="bg-indigo-50/50 border border-indigo-100 p-4 rounded-xl mb-6">
+            <h3 class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-3">Thông tin chi tiết</h3>
+            <div class="grid grid-cols-2 gap-y-3 text-sm text-gray-700">
+                <div class="col-span-2 flex items-center gap-2">
+                    <i class="fas fa-envelope w-5 text-indigo-400"></i>
+                    <span id="p-email" class="font-medium text-gray-600">...</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-phone-alt w-5 text-indigo-400"></i>
+                    <span id="p-phone" class="font-medium">...</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-desktop w-5 text-indigo-400"></i>
+                    <span class="text-gray-500">PC:</span> <span id="p-pc" class="font-bold text-gray-800">...</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-users w-5 text-indigo-400"></i>
+                    <span class="text-gray-500">Team:</span> <span id="p-team" class="font-bold text-indigo-700">...</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-gamepad w-5 text-indigo-400"></i>
+                    <span class="text-gray-500">Game:</span> <span id="p-game" class="font-bold text-orange-600">...</span>
+                </div>
+            </div>
         </div>
 
         <div class="space-y-4">
-            <h3 class="font-bold text-gray-700 uppercase text-sm mb-2">Cập Nhật Chạy Game Hôm Nay</h3>
+            <h3 class="font-bold text-gray-700 uppercase text-sm mb-2 border-l-4 border-green-500 pl-2">Cập Nhật Sản Lượng</h3>
             
             <div>
                 <label class="block text-xs font-bold text-gray-500 mb-1">AION 2 (Kinah)</label>
-                <input type="number" id="input-kinah" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50">
+                <div class="relative">
+                    <input type="number" id="input-kinah" class="w-full p-3 pl-4 pr-12 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none bg-white font-bold text-gray-700 shadow-sm">
+                    <span class="absolute right-4 top-3.5 text-gray-400 text-sm font-bold">K</span>
+                </div>
             </div>
             
             <div>
                 <label class="block text-xs font-bold text-gray-500 mb-1">MAPLESTORY (Meso)</label>
-                <input type="number" id="input-meso" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50">
+                <div class="relative">
+                    <input type="number" id="input-meso" class="w-full p-3 pl-4 pr-12 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none bg-white font-bold text-gray-700 shadow-sm">
+                    <span class="absolute right-4 top-3.5 text-gray-400 text-sm font-bold">M</span>
+                </div>
             </div>
             
-            <button id="updateBtn" onclick="updateProduction()" class="w-full bg-green-600 text-white py-4 rounded-xl font-bold hover:bg-green-700 transition-all shadow-md mt-4">LƯU SẢN LƯỢNG MỚI</button>
+            <button id="updateBtn" onclick="updateProduction()" class="w-full bg-green-600 text-white py-4 rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg mt-4 flex items-center justify-center gap-2">
+                <i class="fas fa-save"></i> LƯU SẢN LƯỢNG MỚI
+            </button>
         </div>
 
     </div>
