@@ -39,8 +39,9 @@ async function handleLogin() {
             
             // PHÂN LUỒNG: ADMIN VÀO INDEX, USER VÀO PROFILE
             if (data.user.role === 'admin') {
-                alert("Xin chào Admin! Đang vào trang quản trị tổng...");
-                window.location.assign('index.html');
+                localStorage.setItem('user', JSON.stringify(data.user));
+            // Đăng nhập xong, TẤT CẢ đều vào profile để báo cáo
+            window.location.assign('profile.html');
             } else {
                 window.location.assign('profile.html');
             }
@@ -91,18 +92,12 @@ async function updateProduction() {
 window.onload = () => {
     const user = JSON.parse(localStorage.getItem('user'));
 
-    // 1. Nếu đang ở trang DASHBOARD TỔNG (index.html)
+    // 1. TRANG INDEX (Công khai cho mọi người)
     if (document.getElementById('stat-total')) {
-        // CHẶN: Nếu chưa đăng nhập hoặc không phải Admin thì đuổi về
-        if (!user || user.role !== 'admin') {
-            alert("Bạn không có quyền xem trang quản trị này!");
-            window.location.assign(user ? 'profile.html' : 'login.html');
-            return;
-        }
-        fetchStats(); // Chỉ admin mới được chạy lệnh lấy số liệu tổng
+        fetchStats(); // Ai vào cũng xem được số tổng
     }
     
-    // 2. Nếu đang ở trang CÁ NHÂN (profile.html)
+    // 2. TRANG PROFILE
     if (document.getElementById('p-id')) {
         if (!user) return window.location.assign('login.html');
         
@@ -112,14 +107,24 @@ window.onload = () => {
         setVal('input-kinah', user.kinah || 0);
         setVal('input-meso', user.meso || 0);
 
-        // THÊM NÚT ĐẶC QUYỀN CHO ADMIN: Nút quay lại Dashboard
+        // HIỆN NÚT "VÀO TRANG ADMIN" NẾU LÀ LYUKIKZ
         if (user.role === 'admin') {
             const adminBtn = document.createElement('button');
-            adminBtn.className = "w-full bg-slate-800 text-white p-3 rounded-xl font-bold mt-4 shadow-lg hover:bg-slate-900";
-            adminBtn.innerText = "TRỞ VỀ BẢNG ĐIỀU KHIỂN (ADMIN)";
-            adminBtn.onclick = () => window.location.assign('index.html');
+            adminBtn.className = "w-full bg-slate-900 text-white p-3 rounded-xl font-bold mt-4 shadow-lg hover:bg-black transition-all";
+            adminBtn.innerHTML = '<i class="fas fa-user-shield"></i> VÀO TRANG QUẢN TRỊ (ADMIN)';
+            adminBtn.onclick = () => window.location.assign('admin.html');
             document.getElementById('updateBtn').after(adminBtn);
         }
+    }
+
+    // 3. TRANG ADMIN (Khóa bảo mật)
+    if (document.getElementById('admin-table')) {
+        // Đuổi cổ nếu chưa đăng nhập hoặc không phải Admin
+        if (!user || user.role !== 'admin') {
+            alert("Cảnh báo: Bạn không có quyền truy cập trang này!");
+            return window.location.assign('profile.html');
+        }
+        fetchAdminData();
     }
 };
 
@@ -163,4 +168,22 @@ if (registerForm) {
             btn.innerText = "ĐĂNG KÝ TÀI KHOẢN";
         }
     });
+
+}
+async function fetchAdminData() {
+    try {
+        const res = await fetch(`${CONFIG.SCRIPT_URL}?action=get_admin`);
+        const list = await res.json();
+        const tbody = document.getElementById('admin-table');
+        tbody.innerHTML = list.map(u => `
+            <tr class="border-b hover:bg-gray-50">
+                <td class="p-3 font-bold">${u.id}</td>
+                <td class="p-3">${u.team}</td>
+                <td class="p-3 text-purple-600 font-bold">${u.kinah}</td>
+                <td class="p-3 text-green-600 font-bold">${u.meso}</td>
+            </tr>
+        `).join('');
+    } catch (e) {
+        console.log("Lỗi tải dữ liệu Admin");
+    }
 }
