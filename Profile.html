@@ -2,51 +2,40 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Profile - Sản Lượng Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo Cáo Sản Lượng</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-slate-50 p-4">
-    <div id="profile-container" class="max-w-2xl mx-auto card p-8 hidden">
-        <div class="flex justify-between items-center mb-8 border-b pb-4">
-            <h2 class="text-2xl font-bold text-gray-800">Chào, <span id="p-id" class="text-indigo-600">--</span></h2>
-            <button onclick="logout()" class="bg-red-100 text-red-600 px-4 py-2 rounded-lg font-bold hover:bg-red-200">Thoát</button>
+<body class="bg-gray-100 p-4">
+    <div class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-lg mt-10">
+        
+        <div class="flex justify-between items-center border-b pb-4 mb-4">
+            <div>
+                <h2 class="text-xl font-bold text-gray-800">Xin chào, <span id="p-id" class="text-indigo-600">...</span></h2>
+                <p class="text-sm text-gray-500 mt-1">Team: <span id="p-team" class="font-bold">...</span> | Game: <span id="p-game" class="font-bold">...</span></p>
+            </div>
+            <button onclick="logout()" class="text-red-500 font-bold hover:underline px-2 py-1 bg-red-50 rounded-lg">Thoát</button>
         </div>
 
-        <div class="grid grid-cols-2 gap-4 mb-8">
-            <div class="p-4 bg-indigo-50 rounded-lg"><p class="text-xs text-indigo-400 font-bold uppercase">Team</p><p id="p-team" class="font-bold">--</p></div>
-            <div class="p-4 bg-indigo-50 rounded-lg"><p class="text-xs text-indigo-400 font-bold uppercase">Game</p><p id="p-game" class="font-bold">--</p></div>
+        <div class="space-y-4">
+            <h3 class="font-bold text-gray-700 uppercase text-sm mb-2">Cập Nhật Chạy Game Hôm Nay</h3>
+            
+            <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">AION 2 (Kinah)</label>
+                <input type="number" id="input-kinah" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50">
+            </div>
+            
+            <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">MAPLESTORY (Meso)</label>
+                <input type="number" id="input-meso" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50">
+            </div>
+            
+            <button id="updateBtn" onclick="updateProduction()" class="w-full bg-green-600 text-white py-4 rounded-xl font-bold hover:bg-green-700 transition-all shadow-md mt-4">LƯU SẢN LƯỢNG MỚI</button>
         </div>
 
-        <div class="space-y-6">
-            <h3 class="font-bold text-gray-700"><i class="fas fa-edit mr-2"></i>Cập nhật sản lượng</h3>
-            <div>
-                <label class="block text-sm font-semibold mb-2">AION 2 (M Kinah)</label>
-                <input type="number" id="input-kinah" class="input-field" placeholder="Ví dụ: 800">
-            </div>
-            <div>
-                <label class="block text-sm font-semibold mb-2">MapleStory (B Meso)</label>
-                <input type="number" id="input-meso" class="input-field" placeholder="Ví dụ: 10">
-            </div>
-            <button onclick="updateProduction()" id="updateBtn" class="w-full bg-green-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-green-100 hover:bg-green-700">
-                LƯU SẢN LƯỢNG MỚI
-            </button>
-        </div>
     </div>
 
     <script src="config.js"></script>
     <script src="script.js"></script>
-    <script>
-        // Kiểm tra đăng nhập khi vào trang profile
-        window.onload = () => {
-            const user = JSON.parse(localStorage.getItem('user'));
-            if (!user) {
-                window.location.href = 'login.html';
-            } else {
-                document.getElementById('profile-container').classList.remove('hidden');
-                loadProfile();
-            }
-        };
-    </script>
 </body>
 </html>
