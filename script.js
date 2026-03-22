@@ -303,17 +303,21 @@ window.onload = () => {
     if (originalOnload) originalOnload(); // Chạy các lệnh cũ (load Profile, Index)
 
     const user = JSON.parse(localStorage.getItem('user'));
-
+    
+    // Bổ sung nút Admin vào trang Profile (Nếu là Admin)
+    
     // Bổ sung nút Admin vào trang Profile (Nếu là Admin)
     if (document.getElementById('p-id') && user && user.role === 'admin') {
         // Kiểm tra tránh tạo trùng nút
         if (!document.getElementById('btn-go-admin')) {
             const adminBtn = document.createElement('button');
+            // ... (các đoạn code tạo nút) ...
+            document.getElementById('updateBtn').after(adminBtn);
             adminBtn.id = 'btn-go-admin';
             adminBtn.className = "w-full bg-slate-900 dark:bg-black text-white p-4 rounded-xl font-bold mt-4 shadow-xl hover:bg-slate-800 transition-all flex items-center justify-center gap-2 border border-slate-700";
             adminBtn.innerHTML = '<i class="fas fa-crown text-yellow-400 text-xl"></i> QUẢN TRỊ HỆ THỐNG (ADMIN)';
             adminBtn.onclick = () => window.location.assign('admin.html');
-            document.getElementById('updateBtn').after(adminBtn);
+          
         }
     }
 
@@ -327,12 +331,4 @@ window.onload = () => {
         fetchAdminDetailedData();
     }
 };
-// Bổ sung nút Admin vào trang Profile (Nếu là Admin)
-    if (document.getElementById('p-id') && user && user.role === 'admin') {
-        // Kiểm tra tránh tạo trùng nút
-        if (!document.getElementById('btn-go-admin')) {
-            const adminBtn = document.createElement('button');
-            // ... (các đoạn code tạo nút) ...
-            document.getElementById('updateBtn').after(adminBtn);
-        }
-    }
+
