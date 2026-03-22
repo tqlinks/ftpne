@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cửa Hàng Linh Thú - FPE Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-slate-100 dark:bg-gray-900 min-h-screen p-4 md:p-8 transition-colors duration-300">
+    <div class="max-w-6xl mx-auto">
+        
+        <div class="flex flex-col md:flex-row justify-between items-center bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg mb-8 border dark:border-gray-700">
+            <div class="flex items-center gap-4 mb-4 md:mb-0">
+                <div class="bg-gradient-to-br from-yellow-400 to-orange-500 p-4 rounded-xl shadow-inner">
+                    <i class="fas fa-store text-3xl text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black text-gray-800 dark:text-white uppercase tracking-wider">Thương Hội Linh Thú</h1>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Dùng FPE để thu phục hộ pháp</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700/50 px-5 py-2.5 rounded-xl flex items-center gap-2 shadow-sm">
+                    <span class="text-xs font-bold text-yellow-700 dark:text-yellow-500 uppercase">Ví FPE:</span>
+                    <span id="shop-fpe" class="text-xl font-black text-orange-600 dark:text-yellow-400">0</span>
+                    <i class="fas fa-coins text-yellow-500"></i>
+                </div>
+                <button onclick="window.location.assign('profile.html')" class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-5 py-2.5 rounded-xl font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition shadow">
+                    <i class="fas fa-arrow-left"></i> Về Hồ Sơ
+                </button>
+            </div>
+        </div>
+
+        <div id="pet-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            </div>
+
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // === DATA 8 LINH THÚ ===
+        const petsData = [
+            { id: 'p1', name: 'Hỏa Hồ Ly', element: 'Hỏa', desc: 'Tăng 5% tốc độ farm', price: 50, color: 'text-red-500', bg: 'bg-red-100 dark:bg-red-900/30', border: 'border-red-500', icon: 'fa-fire' },
+            { id: 'p2', name: 'Thủy Giao Long', element: 'Thủy', desc: 'Giảm tỷ lệ kẹt acc', price: 50, color: 'text-blue-500', bg: 'bg-blue-100 dark:bg-blue-900/30', border: 'border-blue-500', icon: 'fa-water' },
+            { id: 'p3', name: 'Phong Mãng Xà', element: 'Phong', desc: 'Tăng tốc chạy về thành', price: 50, color: 'text-teal-500', bg: 'bg-teal-100 dark:bg-teal-900/30', border: 'border-teal-500', icon: 'fa-wind' },
+            { id: 'p4', name: 'Thạch Tinh Sứ', element: 'Thổ', desc: 'Tăng sức chứa rương', price: 50, color: 'text-amber-600', bg: 'bg-amber-100 dark:bg-amber-900/30', border: 'border-amber-600', icon: 'fa-mountain' },
+            { id: 'p5', name: 'Lôi Cuồng Báo', element: 'Lôi', desc: 'X2 Kinah trong 1 giờ', price: 100, color: 'text-purple-500', bg: 'bg-purple-100 dark:bg-purple-900/30', border: 'border-purple-500', icon: 'fa-bolt' },
+            { id: 'p6', name: 'Băng Ma Sói', element: 'Băng', desc: 'Giảm hao mòn vũ khí', price: 100, color: 'text-cyan-400', bg: 'bg-cyan-100 dark:bg-cyan-900/30', border: 'border-cyan-400', icon: 'fa-snowflake' },
+            { id: 'p7', name: 'Quang Thiên Mã', element: 'Quang', desc: 'Bảo hộ khỏi ban 1 lần', price: 300, color: 'text-yellow-400', bg: 'bg-yellow-100 dark:bg-yellow-900/30', border: 'border-yellow-400', icon: 'fa-sun' },
+            { id: 'p8', name: 'Hắc Ma Vương', element: 'Ám', desc: 'Tăng 10% rớt đồ hiếm', price: 300, color: 'text-gray-800 dark:text-gray-300', bg: 'bg-gray-200 dark:bg-gray-700', border: 'border-gray-800 dark:border-gray-500', icon: 'fa-moon' }
+        ];
+
+        // Khởi tạo trang
+        window.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user) return window.location.assign('login.html');
+            
+            // Hiện FPE
+            document.getElementById('shop-fpe').innerText = user.fpe || 0;
+
+            // Render danh sách thú
+            const grid = document.getElementById('pet-grid');
+            grid.innerHTML = petsData.map(pet => `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border-2 border-transparent hover:${pet.border} transition-all duration-300 overflow-hidden group">
+                    <div class="h-40 ${pet.bg} flex items-center justify-center relative overflow-hidden">
+                        <i class="fas ${pet.icon} text-6xl ${pet.color} group-hover:scale-110 transition-transform duration-300 opacity-80"></i>
+                        <span class="absolute top-2 right-2 ${pet.bg} ${pet.color} text-[10px] font-black px-2 py-1 rounded border ${pet.border}">
+                            HỆ ${pet.element.toUpperCase()}
+                        </span>
+                    </div>
+                    
+                    <div class="p-5">
+                        <h3 class="text-lg font-black text-gray-800 dark:text-white mb-1">${pet.name}</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-4 h-8">${pet.desc}</p>
+                        
+                        <button onclick="buyPet('${pet.id}', ${pet.price}, '${pet.name}')" class="w-full flex justify-between items-center bg-gray-100 dark:bg-gray-700 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 text-gray-800 dark:text-white px-4 py-3 rounded-xl font-bold transition">
+                            <span>Mua ngay</span>
+                            <span class="text-orange-600 dark:text-yellow-400 font-black">${pet.price} <i class="fas fa-coins text-sm"></i></span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        });
+
+        // Xử lý mua hàng
+        function buyPet(petId, price, petName) {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const currentFpe = Number(user.fpe) || 0;
+
+            if (currentFpe < price) {
+                alert(`❌ Bạn không đủ FPE! Cần thêm ${price - currentFpe} FPE nữa để mua ${petName}. Hãy chăm chỉ điểm danh nhé!`);
+                return;
+            }
+
+            if(confirm(`Bạn có chắc chắn muốn chi ${price} FPE để thu phục [${petName}]?`)) {
+                // Trừ tiền nội bộ
+                user.fpe = currentFpe - price;
+                
+                // [TƯƠNG LAI]: Lưu ID pet vào mảng user.pets để biết họ đã sở hữu
+                
+                localStorage.setItem('user', JSON.stringify(user));
+                document.getElementById('shop-fpe').innerText = user.fpe;
+                
+                // [Ghi chú cho Code.gs]: Gọi API trừ tiền trên Excel ở đây
+                alert(`🎉 Chúc mừng! Bạn đã thu phục thành công ${petName}!`);
+            }
+        }
+    </script>
+</body>
+</html>
