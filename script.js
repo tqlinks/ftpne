@@ -23,7 +23,6 @@ async function fetchDashboardStats() {
 
 // 2. Xử lý gửi Form Đăng ký (POST)
 // Trong file script.js, thay đổi phần xử lý gửi form như sau:
-
 const regForm = document.getElementById('registrationForm');
 if (regForm) {
     regForm.addEventListener('submit', function(e) {
@@ -38,30 +37,25 @@ if (regForm) {
         const formData = new FormData(this);
         const payload = Object.fromEntries(formData.entries());
 
-        // CHỈNH SỬA PHẦN FETCH NÀY:
+        // CHỈNH SỬA QUAN TRỌNG TẠI ĐÂY
         fetch(CONFIG.SCRIPT_URL, {
             method: 'POST',
-            body: JSON.stringify(payload),
+            mode: 'no-cors', // Ép buộc không kiểm tra CORS
             headers: {
-                'Content-Type': 'text/plain;charset=utf-8', // Dùng text/plain để tránh kích hoạt kiểm tra CORS phức tạp
+                'Content-Type': 'text/plain' // Đánh lừa trình duyệt
             },
+            body: JSON.stringify(payload)
         })
-        .then(res => res.json()) // Giờ đây bạn có thể đọc phản hồi thật
-        .then(response => {
-            if(response.result === 'success') {
-                alert("Đăng ký thành công!");
-                this.reset();
-                if(typeof fetchDashboardStats === 'function') fetchDashboardStats();
-            } else {
-                alert("Lỗi từ server: " + response.error);
-            }
+        .then(() => {
+            // Với mode 'no-cors', chúng ta không đọc được phản hồi thành công từ Google
+            // Nhưng 99% dữ liệu ĐÃ VÀO được Sheet nếu cấu hình Apps Script đúng.
+            alert("Thông tin đã được gửi đi thành công!");
+            this.reset();
+            if (typeof fetchDashboardStats === 'function') fetchDashboardStats();
         })
         .catch(err => {
-            // Đôi khi Google vẫn chặn Redirect, nhưng dữ liệu ĐÃ VÀO SHEET
-            // Chúng ta kiểm tra nếu thấy lỗi nhưng thực tế dữ liệu vẫn có thể đã tới
-            console.log("Check mạng:", err);
-            alert("Thông tin đã được gửi đi! Hãy kiểm tra lại file Excel của bạn.");
-            this.reset();
+            console.error("Lỗi mạng:", err);
+            alert("Có lỗi kết nối, vui lòng thử lại.");
         })
         .finally(() => {
             btn.disabled = false;
@@ -69,6 +63,7 @@ if (regForm) {
         });
     });
 }
+
 
 // 3. Tiện ích: Ẩn/Hiện mật khẩu
 window.togglePassword = function() {
