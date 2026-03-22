@@ -78,19 +78,34 @@
                         <span id="txt-bar-meso" class="absolute inset-0 flex items-center justify-center text-[9px] font-black text-white">0%</span>
                     </div>
                 </div>
+                <div>
+                    <div class="flex justify-between text-xs mb-1.5">
+                        <span class="font-bold text-orange-600 dark:text-orange-400">Nhân vật Lv45 (Acc)</span>
+                        <span class="font-medium text-gray-600 dark:text-gray-400"><span id="prog-c-current">...</span> / <span id="prog-c-goal">...</span> Acc</span>
+                    </div>
+                    <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3.5 relative overflow-hidden">
+                        <div id="bar-char45" class="progress-bar bg-orange-500 h-full rounded-full" style="width: 0%"></div>
+                        <span id="txt-bar-char45" class="absolute inset-0 flex items-center justify-center text-[9px] font-black text-white">0%</span>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="space-y-4">
             <h3 class="font-bold text-gray-700 dark:text-gray-300 uppercase text-sm mb-2 border-l-4 border-green-500 dark:border-green-400 pl-2">Báo Cáo Sản Lượng Mới</h3>
-            <div class="grid grid-cols-2 gap-4">
+            
+            <div class="grid grid-cols-3 gap-3">
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Kinah M</label>
-                    <input type="number" id="input-kinah" class="w-full p-3 border rounded-xl outline-none font-bold shadow-inner bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-green-500">
+                    <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 mb-1">Kinah (M)</label>
+                    <input type="number" id="input-kinah" class="w-full p-2.5 border rounded-xl outline-none font-bold shadow-inner bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-green-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Meso B</label>
-                    <input type="number" id="input-meso" class="w-full p-3 border rounded-xl outline-none font-bold shadow-inner bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-green-500">
+                    <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 mb-1">Meso (B)</label>
+                    <input type="number" id="input-meso" class="w-full p-2.5 border rounded-xl outline-none font-bold shadow-inner bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-green-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 mb-1">Acc Lv45</label>
+                    <input type="number" id="input-char45" class="w-full p-2.5 border rounded-xl outline-none font-bold shadow-inner bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-green-500">
                 </div>
             </div>
             
