@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng Nhập - Game Team Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 flex items-center justify-center min-h-screen">
+    <div class="card p-8 w-full max-w-md shadow-2xl">
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold text-indigo-600">Đăng Nhập</h2>
+            <p class="text-gray-500">Hệ thống quản lý sản lượng</p>
+        </div>
+        <div class="space-y-4">
+            <input type="text" id="login-id" placeholder="ID Nhân Viên" class="input-field">
+            <input type="password" id="login-pass" placeholder="Mật khẩu" class="input-field">
+            <button onclick="handleLogin()" id="loginBtn" class="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 transition-all">
+                ĐĂNG NHẬP
+            </button>
+            <p class="text-center text-sm text-gray-500">
+                Chưa có tài khoản? <a href="register.html" class="text-indigo-600 font-bold">Đăng ký ngay</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
