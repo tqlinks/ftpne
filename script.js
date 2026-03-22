@@ -69,23 +69,46 @@ function updateProgressBar(idBar, idText, current, goal) {
 async function updateProduction() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user) return window.location.assign('login.html');
+
+    // Lấy giá trị từ các ô nhập liệu
     const kinah = document.getElementById('input-kinah').value;
     const meso = document.getElementById('input-meso').value;
-    const char45 = document.getElementById('input-char45').value; // MỚI
+    const char45 = document.getElementById('input-char45').value; // Lấy thêm số lượng nhân vật
+
     const btn = document.getElementById('updateBtn');
     
-    btn.disabled = true; btn.innerText = "Đang lưu...";
+    // Vô hiệu hóa nút để tránh bấm nhiều lần
+    btn.disabled = true; 
+    btn.innerHTML = '<i class="fas fa-spinner animate-spin"></i> Đang lưu...';
+
     try {
-        await fetch(CONFIG.SCRIPT_URL, {
-            method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
-            body: JSON.stringify({ action: "update_prod", id: user.id, kinah: kinah, meso: meso, char45: char45 }) // GỬI THÊM CHAR45
+        const response = await fetch(CONFIG.SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Quan trọng để tránh lỗi CORS
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({ 
+                action: "update_prod", 
+                id: user.id, 
+                kinah: kinah, 
+                meso: meso, 
+                char45: char45 // Gửi lên Apps Script
+            })
         });
-        user.kinah = kinah; user.meso = meso; user.char45 = char45; // Lưu vào biến cục bộ
+
+        // Cập nhật lại bộ nhớ tạm trên máy nhân viên để hiển thị ngay
+        user.kinah = kinah;
+        user.meso = meso;
+        user.char45 = char45;
         localStorage.setItem('user', JSON.stringify(user));
-        alert("Cập nhật sản lượng thành công!");
-        window.location.reload(); 
-    } catch (e) { alert("Lỗi khi gửi dữ liệu!"); } 
-    finally { btn.disabled = false; btn.innerText = "LƯU SẢN LƯỢNG MỚI"; }
+
+        alert("✅ Đã cập nhật sản lượng lên hệ thống!");
+        window.location.reload(); // Load lại để cập nhật thanh tiến độ %
+    } catch (e) {
+        alert("❌ Lỗi kết nối: " + e.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-save"></i> LƯU SẢN LƯỢNG MỚI';
+    }
 }
 
 // === PHẦN MỚI NÂNG CẤP ===
