@@ -7,55 +7,54 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: linear-gradient(135deg, #1a1c2c 0%, #42194e 100%); }
-    </div>
+        body { background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 100%); }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
 
     <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md">
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">ĐĂNG NHẬP</h1>
-            <p class="text-gray-500 mt-2">Hệ thống quản lý sản lượng team Linh</p>
+            <h1 class="text-3xl font-bold text-gray-800 uppercase tracking-wider">Đăng Nhập</h1>
+            <p class="text-gray-500 mt-2 text-sm">Hệ thống quản lý sản lượng - Team Linh</p>
         </div>
 
-        <div class="space-y-6">
+        <div class="space-y-5">
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">ID Nhân Viên</label>
+                <label class="block text-sm font-semibold text-gray-600 mb-1">ID Nhân Viên</label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                        <i class="fas fa-id-badge"></i>
+                        <i class="fas fa-user-circle"></i>
                     </span>
                     <input type="text" id="login-id" 
-                           class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none transition-all" 
-                           placeholder="Ví dụ: NV01">
+                           class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all" 
+                           placeholder="Nhập ID của bạn">
                 </div>
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Mật Khẩu</label>
+                <label class="block text-sm font-semibold text-gray-600 mb-1">Mật Khẩu</label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                        <i class="fas fa-lock"></i>
+                        <i class="fas fa-key"></i>
                     </span>
                     <input type="password" id="login-pass" 
-                           class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none transition-all" 
+                           class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all" 
                            placeholder="••••••••">
-                    <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-purple-600">
+                    <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-indigo-600">
                         <i id="eyeIcon" class="fas fa-eye"></i>
                     </button>
                 </div>
             </div>
 
             <button id="loginBtn" onclick="handleLogin()" 
-                    class="w-full bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 rounded-lg shadow-lg transform transition active:scale-95">
-                ĐĂNG NHẬP
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-lg transform transition hover:-translate-y-0.5 active:scale-95">
+                VÀO HỆ THỐNG
             </button>
 
-            <div class="text-center pt-4">
-                <p class="text-sm text-gray-600">
-                    Chưa có tài khoản? 
-                    <a href="register.html" class="text-purple-700 font-bold hover:underline">Đăng ký thành viên</a>
+            <div class="text-center pt-2">
+                <p class="text-sm text-gray-500">
+                    Bạn là thành viên mới? 
+                    <a href="register.html" class="text-indigo-600 font-bold hover:underline">Đăng ký tại đây</a>
                 </p>
             </div>
         </div>
@@ -65,7 +64,7 @@
     <script src="script.js"></script>
 
     <script>
-        // Hàm ẩn/hiện mật khẩu
+        // Logic ẩn hiện mật khẩu nhanh
         function togglePassword() {
             const passInput = document.getElementById('login-pass');
             const eyeIcon = document.getElementById('eyeIcon');
@@ -78,11 +77,9 @@
             }
         }
 
-        // Hỗ trợ nhấn Enter để đăng nhập nhanh
-        document.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                handleLogin();
-            }
+        // Hỗ trợ phím Enter
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleLogin();
         });
     </script>
 </body>
