@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FREETO PLAY/EARN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="header-section">
+        <div class="icon-box"><i class="fas fa-terminal"></i></div>
+        <h1 class="brand-title">FREETO PLAY/EARN</h1>
+        <div class="sub-title">System Synchronization v2.0</div>
+    </div>
+
+    <div class="container-card">
+        <div id="login-view">
+            <h2>Chào mừng trở lại</h2>
+            <p class="desc">Nhập Email hoặc Tên để truy cập.</p>
+            <div class="input-group">
+                <label>Tài khoản</label>
+                <input type="text" id="login-id" placeholder="Email hoặc Tên">
+            </div>
+            <button class="btn-primary" id="btn-login"><i class="fas fa-bolt"></i> Vào hệ thống</button>
+            <a class="footer-link" id="link-to-reg">Chưa có tài khoản? Đăng ký</a>
+        </div>
+
+        <div id="reg-view" class="hidden">
+            <h2>Đăng ký nhân sự</h2>
+            <div class="input-group"><label>Họ và Tên</label><input type="text" id="reg-name"></div>
+            <div class="input-group"><label>Email</label><input type="email" id="reg-email"></div>
+            <div class="input-group"><label>Số điện thoại</label><input type="text" id="reg-phone"></div>
+            <div class="input-group">
+                <label>Team</label>
+                <select id="reg-team"><option>A</option><option>B</option><option>C</option></select>
+            </div>
+            <div class="input-group">
+                <label>Dự án Game</label>
+                <select id="reg-game"><option>MapleStory</option><option>AION2</option></select>
+            </div>
+            <button class="btn-primary" id="btn-register">Tạo tài khoản</button>
+            <a class="footer-link" id="link-to-login">Đã có tài khoản? Đăng nhập</a>
+        </div>
+
+        <div id="profile-view" class="hidden">
+            <div class="profile-header">
+                <div class="avatar-circle"><i class="fas fa-user-shield"></i></div>
+                <h2 id="p-name">Tên nhân viên</h2>
+            </div>
+            <div id="p-details" class="profile-info"></div>
+            
+            <div class="progress-section">
+                <div class="progress-label">
+                    <span>Tiến độ công việc</span>
+                    <b id="prog-percent">0%</b>
+                </div>
+                <input type="range" id="prog-slider" min="0" max="100" value="0">
+                <button class="btn-primary" id="btn-save-prog" style="background:#10b981; margin-top:15px;">Lưu tiến độ</button>
+            </div>
+            <button class="btn-primary" style="background:#333; margin-top:15px;" onclick="location.reload()">Đăng xuất</button>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
