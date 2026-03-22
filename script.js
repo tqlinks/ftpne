@@ -1,5 +1,9 @@
 // CẤU HÌNH HỆ THỐNG
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxAwgFgId1sozjEphwxHJqWmFmYW2xlZqsygoKHcTnYp4tEJdxYmwPsZxSvkBr-VN_5Nw/exec";
+// Thay đổi phần đầu của file script.js như sau:
+
+// Lấy link từ file config.js
+const SCRIPT_URL = CONFIG.SCRIPT_URL;
+
 
 // 1. Hàm lấy dữ liệu thống kê từ Google Sheet (GET)
 async function fetchDashboardStats() {
