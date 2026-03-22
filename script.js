@@ -468,3 +468,60 @@ window.onload = () => {
         fetchManageData();
     }
 };
+// ==========================================
+// KẾT NỐI DANH SÁCH TEAM ĐỘNG (DYNAMIC TEAMS)
+// ==========================================
+
+// 1. Hàm tự động quét và đổ danh sách Team vào tất cả thẻ Select
+async function loadDynamicTeams() {
+    // Quét tìm tất cả các menu thả xuống có id chứa chữ "-team" 
+    // (Bao gồm: reg-team ở Đăng ký, kpi-team ở Admin, edit-m-team ở Manage)
+    const selects = document.querySelectorAll('select[id$="-team"]'); 
+    if (selects.length === 0) return; 
+
+    try {
+        const res = await fetch(`${CONFIG.SCRIPT_URL}?action=get_teams`);
+        const teams = await res.json();
+        
+        selects.forEach(select => {
+            const currentValue = select.value; // Giữ lại giá trị đang chọn
+            
+            // Nếu là trang Admin set KPI, phải luôn có tùy chọn "Tất cả"
+            let html = select.id === 'kpi-team' 
+                ? '<option value="All">Tất cả nhân viên (All Teams)</option>' 
+                : '';
+            
+            // Đổ danh sách team vào
+            teams.forEach(t => {
+                html += `<option value="${t}">${t}</option>`;
+            });
+            
+            select.innerHTML = html;
+            
+            // Trả lại giá trị cũ nếu nó vẫn tồn tại trong danh sách
+            if (currentValue && (teams.includes(currentValue) || currentValue === 'All')) {
+                select.value = currentValue;
+            }
+        });
+    } catch(e) { console.log("Không thể tải danh sách Team tự động", e); }
+}
+
+// 2. Hàm cho Admin tạo Team mới
+async function createNewTeam() {
+    const newTeam = prompt("Nhập tên Team mới của bạn\n(Ví dụ: Team Cày Đêm, Team Hoc Mon, Team C...):");
+    if (!newTeam || newTeam.trim() === "") return;
+
+    try {
+        await fetch(CONFIG.SCRIPT_URL, {
+            method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({ action: "add_team", newTeam: newTeam.trim() })
+        });
+        alert(`Đã thêm [${newTeam}] vào hệ thống!`);
+        
+        // Gọi lại hàm load để cập nhật menu thả xuống ngay lập tức
+        loadDynamicTeams(); 
+    } catch(e) { alert("Lỗi mạng! Không thể thêm Team."); }
+}
+
+// CHÚ Ý: Bắt sự kiện tải trang để load danh sách Team
+// Bạn hãy tìm đến hàm window.onload hiện tại của bạn, và thêm dòng `loadDynamicTeams();` vào ngay dòng đầu tiên bên trong nó.
