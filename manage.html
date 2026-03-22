@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Nhân Sự - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-slate-100 dark:bg-gray-900 min-h-screen p-4 md:p-8 transition-colors duration-300">
+    <div class="max-w-6xl mx-auto" id="manage-dashboard">
+        
+        <div class="flex flex-col md:flex-row justify-between items-center bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg mb-8 border dark:border-gray-700">
+            <div class="flex items-center gap-4 mb-4 md:mb-0">
+                <div class="bg-indigo-600 p-4 rounded-xl shadow-inner">
+                    <i class="fas fa-users-cog text-3xl text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black text-gray-800 dark:text-white uppercase tracking-wider">Quản Lý Nhân Sự</h1>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Chỉnh sửa hồ sơ & Cấp quyền</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="window.location.assign('admin.html')" class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-5 py-2.5 rounded-xl font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition shadow">
+                    <i class="fas fa-chart-line"></i> Bảng KPI
+                </button>
+                <button onclick="window.location.assign('profile.html')" class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-5 py-2.5 rounded-xl font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition shadow">
+                    Về Profile
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border dark:border-gray-700">
+            <div class="p-6 border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex justify-between items-center">
+                <h2 class="text-lg font-bold text-gray-800 dark:text-white uppercase">Danh sách Đội ngũ</h2>
+                <button onclick="fetchManageData()" class="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"><i class="fas fa-sync-alt"></i> Tải lại</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-[900px]">
+                    <thead class="bg-slate-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs uppercase font-black">
+                        <tr>
+                            <th class="p-4 w-1/4">Nhân viên</th>
+                            <th class="p-4 w-1/5">Liên hệ / PC</th>
+                            <th class="p-4 w-1/6">Team & Game</th>
+                            <th class="p-4 w-1/6">Quyền hạn</th>
+                            <th class="p-4 w-1/6 text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="manage-table-body" class="divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+                        <tr><td colspan="5" class="p-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin text-2xl mb-2"></i><br>Đang tải dữ liệu...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="adminEditModal" class="fixed inset-0 bg-gray-900/60 flex items-center justify-center p-4 transition-opacity duration-300 opacity-0 pointer-events-none z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl w-full max-w-md transform scale-95 transition-transform duration-300 relative border dark:border-gray-700">
+            <button onclick="closeAdminEditModal()" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition">
+                <i class="fas fa-times-circle text-2xl"></i>
+            </button>
+            <h2 class="text-xl font-black text-gray-800 dark:text-white uppercase mb-2 flex items-center gap-2">
+                <i class="fas fa-user-edit text-indigo-500"></i> Cập nhật: <span id="edit-m-id" class="text-indigo-600"></span>
+            </h2>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-6" id="edit-m-email"></p>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div class="col-span-2">
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Số điện thoại</label>
+                    <input type="text" id="edit-m-phone" class="w-full p-3 border rounded-xl outline-none bg-slate-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">PC Giao Việc</label>
+                    <input type="text" id="edit-m-pc" class="w-full p-3 border rounded-xl outline-none bg-slate-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Phân Team</label>
+                    <select id="edit-m-team" class="w-full p-3 border rounded-xl outline-none bg-slate-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500">
+                        <option value="Team A">Team A</option>
+                        <option value="Team B">Team B</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Game</label>
+                    <select id="edit-m-game" class="w-full p-3 border rounded-xl outline-none bg-slate-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500">
+                        <option value="Aion 2">Aion 2</option>
+                        <option value="MapleStory">MapleStory</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Phân Quyền</label>
+                    <select id="edit-m-role" class="w-full p-3 border rounded-xl outline-none font-bold bg-slate-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500">
+                        <option value="user" class="text-gray-600">Thành viên (User)</option>
+                        <option value="admin" class="text-red-500 font-bold">Quản Trị (Admin)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button onclick="submitAdminUserUpdate()" id="btn-save-manage" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg mt-6 flex items-center justify-center gap-2">
+                <i class="fas fa-save"></i> LƯU THAY ĐỔI
+            </button>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
