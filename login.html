@@ -2,29 +2,88 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Đăng Nhập - Game Team Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập - Hệ Thống Quản Lý</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    </style>
 </head>
-<body class="bg-slate-50 flex items-center justify-center min-h-screen">
-    <div class="card p-8 w-full max-w-md shadow-2xl">
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md">
         <div class="text-center mb-8">
-            <h2 class="text-3xl font-bold text-indigo-600">Đăng Nhập</h2>
-            <p class="text-gray-500">Hệ thống quản lý sản lượng</p>
+            <h1 class="text-3xl font-bold text-gray-800">ĐĂNG NHẬP</h1>
+            <p class="text-gray-500 mt-2">Vui lòng nhập tài khoản để tiếp tục</p>
         </div>
-        <div class="space-y-4">
-            <input type="text" id="login-id" placeholder="ID Nhân Viên" class="input-field">
-            <input type="password" id="login-pass" placeholder="Mật khẩu" class="input-field">
-            <button onclick="handleLogin()" id="loginBtn" class="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 transition-all">
+
+        <div class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">ID Nhân Viên</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                        <i class="fas fa-user"></i>
+                    </span>
+                    <input type="text" id="login-id" 
+                           class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all" 
+                           placeholder="Nhập ID (Ví dụ: NV01)">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Mật Khẩu</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                        <i class="fas fa-lock"></i>
+                    </span>
+                    <input type="password" id="login-pass" 
+                           class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all" 
+                           placeholder="••••••••">
+                    <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-indigo-600">
+                        <i id="eyeIcon" class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button id="loginBtn" onclick="handleLogin()" 
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg shadow-lg transform transition hover:-translate-y-1 active:scale-95">
                 ĐĂNG NHẬP
             </button>
-            <p class="text-center text-sm text-gray-500">
-                Chưa có tài khoản? <a href="register.html" class="text-indigo-600 font-bold">Đăng ký ngay</a>
-            </p>
+
+            <div class="text-center space-y-2">
+                <p class="text-sm text-gray-600">
+                    Chưa có tài khoản? 
+                    <a href="register.html" class="text-indigo-600 font-bold hover:underline">Đăng ký ngay</a>
+                </p>
+                <a href="index.html" class="text-xs text-gray-400 hover:text-gray-600 block">← Quay lại Dashboard</a>
+            </div>
         </div>
     </div>
 
     <script src="config.js"></script>
     <script src="script.js"></script>
+
+    <script>
+        // Hàm phụ trợ ẩn hiện mật khẩu ngay tại trang login
+        function togglePassword() {
+            const passInput = document.getElementById('login-pass');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                passInput.type = 'password';
+                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        // Cho phép nhấn phím Enter để đăng nhập
+        document.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                handleLogin();
+            }
+        });
+    </script>
 </body>
 </html>
