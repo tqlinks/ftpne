@@ -3,55 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FREETO System</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Game Team Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #f8fafc; }
+        .card { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    </style>
 </head>
-<body>
-    <div class="container-card">
-        <div id="login-view">
-            <h2>Đăng nhập</h2>
-            <input type="text" id="login-id" placeholder="Email hoặc Tên">
-            <input type="password" id="login-pass" placeholder="Mật khẩu">
-            <button id="btn-login" class="btn-primary">Vào hệ thống</button>
-            <p><a id="link-to-reg">Tạo tài khoản mới</a></p>
+<body class="p-4 md:p-8">
+
+    <div class="flex justify-between items-center mb-8">
+        <div class="flex items-center gap-3">
+            <div class="bg-indigo-600 p-2 rounded-lg text-white">
+                <i class="fas fa-gamepad text-2xl"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold text-gray-800">Game Team Manager</h1>
+                <p class="text-xs text-gray-500 uppercase">Quản lý đội ngũ làm việc</p>
+            </div>
         </div>
+        <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-indigo-700 transition">
+            <i class="fas fa-sign-in-alt"></i> Đăng Nhập
+        </button>
+    </div>
 
-        <div id="reg-view" class="hidden">
-            <h2>Đăng ký nhân sự</h2>
-            <input type="text" id="reg-name" placeholder="Họ và Tên">
-            <input type="email" id="reg-email" placeholder="Email">
-            <input type="text" id="reg-phone" placeholder="Số điện thoại">
-            <input type="text" id="reg-pc" placeholder="Số máy làm việc">
-            <input type="password" id="reg-pass" placeholder="Mật khẩu">
-            <select id="reg-team"><option>Team A</option><option>Team B</option></select>
-            <select id="reg-game"><option>Dự án 1</option><option>Dự án 2</option></select>
-            <button id="btn-register" class="btn-primary">Hoàn tất</button>
-            <p><a id="link-to-login">Quay lại đăng nhập</a></p>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="card p-4 flex justify-between items-center">
+            <div>
+                <p class="text-xs font-bold text-gray-400 uppercase">Tổng Thành Viên</p>
+                <p class="text-2xl font-bold" id="totalMembers">8</p>
+            </div>
+            <div class="bg-blue-100 p-3 rounded-xl text-blue-600"><i class="fas fa-users"></i></div>
         </div>
-
-        <div id="profile-view" class="hidden">
-            <div class="profile-header">
-                <img src="" id="p-avatar" class="avatar">
-                <h2 id="p-name"></h2>
+        <div class="card p-4 flex justify-between items-center">
+            <div>
+                <p class="text-xs font-bold text-gray-400 uppercase">AION2</p>
+                <p class="text-2xl font-bold">6</p>
             </div>
-            <div id="p-details" class="info-list"></div>
-            
-            <button id="btn-toggle-edit" class="btn-outline">Sửa Profile</button>
-            <div id="edit-form" class="hidden">
-                <input type="text" id="edit-avatar" placeholder="Link ảnh (URL)">
-                <input type="text" id="edit-phone" placeholder="Số điện thoại mới">
-                <input type="text" id="edit-pc" placeholder="Số máy mới">
-                <button id="btn-save-info" class="btn-primary">Lưu thay đổi</button>
+            <div class="bg-purple-100 p-3 rounded-xl text-purple-600"><i class="fas fa-headset"></i></div>
+        </div>
+        <div class="card p-4 flex justify-between items-center">
+            <div>
+                <p class="text-xs font-bold text-gray-400 uppercase">MAPLESTORY</p>
+                <p class="text-2xl font-bold">2</p>
             </div>
-
-            <div class="prog-box">
-                <p>Tiến độ: <span id="prog-percent">0%</span></p>
-                <input type="range" id="prog-slider" min="0" max="100">
-                <button id="btn-save-prog" class="btn-success">Cập nhật</button>
+            <div class="bg-teal-100 p-3 rounded-xl text-teal-600"><i class="fas fa-desktop"></i></div>
+        </div>
+        <div class="card p-4 flex justify-between items-center">
+            <div>
+                <p class="text-xs font-bold text-gray-400 uppercase">TEAM A / B / C</p>
+                <p class="text-2xl font-bold">2 / 2 / 4</p>
             </div>
-            <button onclick="location.reload()" class="btn-logout">Đăng xuất</button>
+            <div class="bg-yellow-100 p-3 rounded-xl text-yellow-600"><i class="fas fa-user-friends"></i></div>
         </div>
     </div>
-    <script type="module" src="app.js"></script>
+
+    <div class="flex gap-4 mb-6">
+        <button class="bg-white px-4 py-2 rounded-lg shadow-sm border font-medium text-gray-700">Đăng Ký Mới</button>
+        <button class="text-gray-500 px-4 py-2 hover:bg-gray-100 rounded-lg">Danh Sách Thành Viên</button>
+    </div>
+
+    <div class="card p-8 max-w-5xl mx-auto">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="bg-blue-50 p-2 rounded-full text-blue-600"><i class="fas fa-user-plus"></i></div>
+            <h2 class="text-xl font-bold text-gray-800">Đăng Ký Thông Tin</h2>
+        </div>
+
+        <form id="registrationForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-sm font-semibold mb-2">ID</label>
+                <input type="text" name="id" placeholder="Nhập ID của bạn" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required>
+            </div>
+            <div>
+                <label class="block text-sm font-semibold mb-2">Email</label>
+                <input type="email" name="email" placeholder="example@email.com" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required>
+            </div>
+            <div>
+                <label class="block text-sm font-semibold mb-2">Số điện thoại</label>
+                <input type="tel" name="phone" placeholder="0123 456 789" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold mb-2">Số máy làm việc</label>
+                <input type="text" name="pc_number" placeholder="Nhập số máy" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold mb-2">Game làm việc</label>
+                <select name="game" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none appearance-none bg-white">
+                    <option value="">Chọn game</option>
+                    <option value="Aion 2">Aion 2</option>
+                    <option value="MapleStory">MapleStory</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-semibold mb-2">Team</label>
+                <select name="team" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none appearance-none bg-white">
+                    <option value="">Chọn team</option>
+                    <option value="Team A">Team A</option>
+                    <option value="Team B">Team B</option>
+                    <option value="Team C">Team C</option>
+                </select>
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-sm font-semibold mb-2">Mật khẩu</label>
+                <div class="relative">
+                    <input type="password" name="password" placeholder="Tạo mật khẩu để đăng nhập sau" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required>
+                    <i class="far fa-eye absolute right-4 top-4 text-gray-400 cursor-pointer"></i>
+                </div>
+            </div>
+
+            <div class="md:col-span-2 mt-4">
+                <button type="submit" id="submitBtn" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold flex justify-center items-center gap-2 hover:bg-indigo-700 transition">
+                    <i class="fas fa-user-plus"></i> Đăng Ký
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxAwgFgId1sozjEphwxHJqWmFmYW2xlZqsygoKHcTnYp4tEJdxYmwPsZxSvkBr-VN_5Nw/exec";
+
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerText = "Đang xử lý...";
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            // Gửi dữ liệu qua Apps Script
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Quan trọng khi dùng Apps Script Web App
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(() => {
+                alert("Đăng ký thành công!");
+                this.reset();
+            })
+            .catch(error => {
+                console.error('Lỗi:', error);
+                alert("Có lỗi xảy ra, vui lòng thử lại.");
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fas fa-user-plus"></i> Đăng Ký`;
+            });
+        });
+    </script>
 </body>
 </html>
