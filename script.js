@@ -924,3 +924,94 @@ window.onload = () => {
     if (oldArenaOnload) oldArenaOnload();
     if (document.getElementById('owned-pets-list')) loadArena();
 };
+// --- LOGIC MỞ TRỨNG (GACHA) ---
+async function handleGacha() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) return;
+    const GACHA_PRICE = 1;
+
+    if (Number(user.fpe) < GACHA_PRICE) {
+        return alert("Bạn không đủ 100 FPE để mua trứng!");
+    }
+
+    if (!confirm("Bạn có chắc chắn muốn tiêu 1 FPE để mở Trứng Thần Bí không?")) return;
+
+    const btn = document.getElementById('btn-gacha');
+    btn.disabled = true;
+    btn.innerText = "ĐANG ĐẬP TRỨNG...";
+
+    // 1. Thuật toán tỷ lệ
+    const rate = Math.random() * 100;
+    let tier = "";
+    if (rate <= 2) tier = "S";
+    else if (rate <= 8) tier = "A";
+    else if (rate <= 20) tier = "B";
+    else if (rate <= 50) tier = "C";
+    else tier = "D";
+
+    // Phân loại pet theo tier dựa trên ID hoặc giá (hoặc bạn có thể thêm thuộc tính tier vào pets-data.js)
+    // Ở đây mình ví dụ phân loại theo ID: P001-P010 (D), P011-P020 (C), P021-P030 (B), P031-P040 (A), P041-P050 (S)
+    const pool = PET_DATABASE.filter(p => {
+        const idNum = parseInt(p.id.substring(1));
+        if (tier === "D") return idNum >= 1 && idNum <= 10;
+        if (tier === "C") return idNum >= 11 && idNum <= 20;
+        if (tier === "B") return idNum >= 21 && idNum <= 30;
+        if (tier === "A") return idNum >= 31 && idNum <= 40;
+        if (tier === "S") return idNum >= 41 && idNum <= 50;
+    });
+
+    const reward = pool[Math.floor(Math.random() * pool.length)];
+
+    // 2. Gửi lệnh lên Excel
+    try {
+        await fetch(CONFIG.SCRIPT_URL, {
+            method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({ 
+                action: "buy_pet", // Dùng chung action buy_pet đã có
+                id: user.id, 
+                petId: reward.id, 
+                price: GACHA_PRICE 
+            })
+        });
+
+        // Cập nhật LocalStorage
+        user.fpe -= GACHA_PRICE;
+        user.pets = user.pets ? user.pets + "," + reward.id : reward.id;
+        localStorage.setItem('user', JSON.stringify(user));
+
+        // 3. Hiệu ứng thông báo kết quả
+        showGachaResult(reward, tier);
+        
+    } catch (e) {
+        alert("Lỗi kết nối!");
+    } finally {
+        btn.disabled = false;
+        btn.innerText = "MỞ TRỨNG (1 FPE)";
+    }
+}
+
+// Hàm hiển thị kết quả "đập trứng" cho ngầu
+function showGachaResult(pet, tier) {
+    const tierNames = { "S": "TRUYỀN THUYẾT", "A": "SỬ THI", "B": "HIẾM", "C": "PHỔ THÔNG", "D": "TÂN THỦ" };
+    const tierColors = { "S": "text-red-500", "A": "text-orange-500", "B": "text-purple-500", "C": "text-blue-500", "D": "text-gray-400" };
+
+    // Tận dụng Modal có sẵn để hiện kết quả
+    const modalContent = document.getElementById('petModalContent');
+    modalContent.innerHTML = `
+        <div class="p-8 text-center bg-slate-900 text-white">
+            <p class="text-yellow-500 font-bold animate-pulse mb-2">BẠN ĐÃ NHẬN ĐƯỢC</p>
+            <div class="relative inline-block mb-4">
+                <div class="absolute inset-0 bg-white/20 blur-2xl rounded-full"></div>
+                <img src="${pet.img}" class="w-40 h-40 relative z-10 mx-auto">
+            </div>
+            <h2 class="text-3xl font-black ${tierColors[tier]} mb-1">${pet.name}</h2>
+            <p class="text-sm font-bold tracking-widest mb-6 italic">BẬC: ${tierNames[tier]}</p>
+            
+            <button onclick="window.location.reload()" class="w-full bg-white text-black py-3 rounded-xl font-black hover:bg-gray-200 transition-all">TUYỆT VỜI!</button>
+        </div>
+    `;
+    
+    const modal = document.getElementById('petModal');
+    modal.classList.add('opacity-100', 'pointer-events-auto');
+    modal.children[0].classList.replace('scale-95', 'scale-100');
+}
