@@ -92,30 +92,21 @@ window.onload = () => {
 };
 // XỬ LÝ ĐĂNG NHẬP
 async function handleLogin() {
-    const id = document.getElementById('login-id').value;
-    const pass = document.getElementById('login-pass').value;
-    const btn = document.getElementById('loginBtn');
-
-    if (!id || !pass) return alert("Vui lòng điền đủ thông tin");
+    // ... lấy id và pass như cũ ...
     
-    btn.disabled = true;
-    btn.innerText = "Đang kiểm tra...";
-
+    // Thêm tham số callback để dùng JSONP hoặc gọi GET đơn giản
+    const url = `${CONFIG.SCRIPT_URL}?action=login&id=${id}&pass=${pass}`;
+    
     try {
-        const res = await fetch(`${CONFIG.SCRIPT_URL}?action=login&id=${id}&pass=${pass}`);
+        const res = await fetch(url, {
+            method: 'GET', // Chuyển sang GET để Google Apps Script dễ chấp nhận hơn
+            mode: 'cors'
+        });
         const data = await res.json();
-        
-        if (data.status === "success") {
-            localStorage.setItem('user', JSON.stringify(data.user));
-            window.location.href = 'profile.html'; // Chuyển hướng sang Profile
-        } else {
-            alert("ID hoặc mật khẩu không chính xác!");
-        }
+        // ... xử lý đăng nhập tiếp theo ...
     } catch (e) {
-        alert("Lỗi kết nối hệ thống!");
-    } finally {
-        btn.disabled = false;
-        btn.innerText = "ĐĂNG NHẬP";
+        console.error("Lỗi đăng nhập:", e);
+        alert("Không thể kết nối máy chủ. Hãy kiểm tra lại link Web App!");
     }
 }
 
