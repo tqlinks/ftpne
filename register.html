@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng Ký Thành Viên</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="p-4 md:p-8 bg-slate-50">
+    <div class="card p-8 max-w-2xl mx-auto shadow-xl">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">Đăng Ký Nhân Viên Mới</h2>
+        <form id="registrationForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <input type="text" name="id" placeholder="ID Nhân Viên" class="input-field" required>
+            <input type="email" name="email" placeholder="Email" class="input-field" required>
+            <select name="game" class="input-field bg-white" required>
+                <option value="Aion 2">Aion 2</option>
+                <option value="MapleStory">MapleStory</option>
+            </select>
+            <select name="team" class="input-field bg-white" required>
+                <option value="Team A">Team A</option>
+                <option value="Team B">Team B</option>
+                <option value="Team C">Team C</option>
+            </select>
+            <input type="password" name="password" placeholder="Mật khẩu" class="input-field md:col-span-2" required>
+            <button type="submit" id="submitBtn" class="md:col-span-2 bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700">
+                XÁC NHẬN ĐĂNG KÝ
+            </button>
+        </form>
+        <p class="text-center mt-4 text-gray-500">Đã có tài khoản? <a href="login.html" class="text-indigo-600 font-bold">Quay lại đăng nhập</a></p>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
