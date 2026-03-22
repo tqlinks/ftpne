@@ -585,3 +585,34 @@ async function createNewTeam() {
 
 // CHÚ Ý: Bắt sự kiện tải trang để load danh sách Team
 // Bạn hãy tìm đến hàm window.onload hiện tại của bạn, và thêm dòng `loadDynamicTeams();` vào ngay dòng đầu tiên bên trong nó.
+
+// --- XỬ LÝ ĐIỂM DANH NHẬN FPE ---
+async function handleCheckIn() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) return;
+    
+    const today = new Date().toLocaleDateString('vi-VN'); // Lấy ngày VN hiện tại
+    const btn = document.getElementById('btn-checkin');
+    
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ĐANG XỬ LÝ...';
+
+    try {
+        await fetch(CONFIG.SCRIPT_URL, {
+            method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({ action: "check_in", id: user.id, todayDate: today })
+        });
+        
+        // Cộng tạm vào LocalStorage để hiển thị ngay lập tức
+        user.fpe = (Number(user.fpe) || 0) + 5;
+        user.lastCheckIn = today;
+        localStorage.setItem('user', JSON.stringify(user));
+        
+        alert("🎉 Điểm danh thành công! Bạn nhận được +5 Fpe.");
+        window.location.reload(); // Tải lại trang để cập nhật nút
+    } catch (e) {
+        alert("Lỗi mạng! Không thể điểm danh.");
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-calendar-check"></i> ĐIỂM DANH';
+    }
+}
