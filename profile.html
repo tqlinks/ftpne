@@ -137,7 +137,17 @@
                     <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">PC Số (VD: PC01)</label>
                     <input type="text" id="edit-pc" class="w-full p-3 border rounded-xl outline-none bg-slate-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-indigo-500">
                 </div>
-                
+                <div class="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border border-yellow-200 dark:border-yellow-700/50 p-4 rounded-xl mb-6 flex justify-between items-center shadow-sm">
+            <div>
+                <p class="text-[10px] font-black text-yellow-600 dark:text-yellow-500 uppercase tracking-widest mb-1">Điểm FPE hiện tại</p>
+                <p class="text-3xl font-black text-yellow-700 dark:text-yellow-400 drop-shadow-sm">
+                    <span id="p-fpe">0</span> <i class="fas fa-coins text-yellow-500 text-xl ml-1 animate-bounce"></i>
+                </p>
+            </div>
+            <button id="btn-checkin" onclick="handleCheckIn()" class="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white px-5 py-3 rounded-xl font-black shadow-lg shadow-orange-500/30 transition-all active:scale-95 flex items-center gap-2 border border-orange-400/50">
+                <i class="fas fa-calendar-check text-lg"></i> ĐIỂM DANH
+            </button>
+        </div>
                 <div class="bg-red-50 dark:bg-red-900/10 p-3 rounded-xl border border-red-100 dark:border-red-800/30">
                     <label class="block text-xs font-bold text-gray-600 dark:text-gray-300 mb-2">Đổi Ảnh Đại Diện</label>
                     <a href="https://www.pinterest.com/search/pins/?q=avatar%20cute&rs=ac&len=6&source_id=ac_g7XfZLPM&eq=avatar&etslf=5661" target="_blank" rel="noopener noreferrer" class="w-full bg-[#E60023] hover:bg-[#c3001e] text-white py-2.5 rounded-lg font-bold transition flex items-center justify-center gap-2 mb-3 shadow-md text-sm">
