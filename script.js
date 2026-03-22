@@ -15,7 +15,7 @@ async function fetchStats() {
     }
 }
 
-// 2. Xử lý Đăng nhập
+// --- XỬ LÝ ĐĂNG NHẬP VÀ ĐIỀU HƯỚNG ---
 async function handleLogin() {
     const idEl = document.getElementById('login-id');
     const passEl = document.getElementById('login-pass');
@@ -27,33 +27,30 @@ async function handleLogin() {
 
     if (!id || !pass) return alert("Vui lòng nhập ID và Mật khẩu!");
 
-    btn.disabled = true;
-    btn.innerText = "Đang kiểm tra...";
+    btn.disabled = true; btn.innerText = "Đang kiểm tra...";
 
     try {
-        // encodeURIComponent bảo vệ mật khẩu khỏi lỗi ký tự đặc biệt
         const url = `${CONFIG.SCRIPT_URL}?action=login&id=${encodeURIComponent(id)}&pass=${encodeURIComponent(pass)}`;
         const res = await fetch(url);
         const data = await res.json();
         
         if (data.status === "success") {
-            // 1. Lưu thông tin người dùng vào bộ nhớ trình duyệt
             localStorage.setItem('user', JSON.stringify(data.user));
             
-            // 2. Hiện thông báo (Tùy chọn, bạn có thể xóa dòng alert này đi cho mượt)
-            alert("Đăng nhập thành công! Chuyển tới trang cá nhân...");
-            
-            // 3. LỆNH CHUYỂN HƯỚNG QUAN TRỌNG NHẤT
-            window.location.href = 'profile.html'; 
-            
+            // PHÂN LUỒNG: ADMIN VÀO INDEX, USER VÀO PROFILE
+            if (data.user.role === 'admin') {
+                alert("Xin chào Admin! Đang vào trang quản trị tổng...");
+                window.location.assign('index.html');
+            } else {
+                window.location.assign('profile.html');
+            }
         } else {
             alert(data.message);
         }
     } catch (e) {
-        alert("Lỗi kết nối máy chủ! Hãy kiểm tra lại link trong config.js");
+        alert("Lỗi kết nối máy chủ!");
     } finally {
-        btn.disabled = false;
-        btn.innerText = "ĐĂNG NHẬP";
+        btn.disabled = false; btn.innerText = "ĐĂNG NHẬP";
     }
 }
 
@@ -90,22 +87,38 @@ async function updateProduction() {
     }
 }
 
-// 4. Khởi chạy khi mở trang
+// --- KIỂM SOÁT BẢO MẬT KHI MỞ TRANG ---
 window.onload = () => {
-    // Nếu ở trang index
-    if (document.getElementById('stat-total')) fetchStats();
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    // 1. Nếu đang ở trang DASHBOARD TỔNG (index.html)
+    if (document.getElementById('stat-total')) {
+        // CHẶN: Nếu chưa đăng nhập hoặc không phải Admin thì đuổi về
+        if (!user || user.role !== 'admin') {
+            alert("Bạn không có quyền xem trang quản trị này!");
+            window.location.assign(user ? 'profile.html' : 'login.html');
+            return;
+        }
+        fetchStats(); // Chỉ admin mới được chạy lệnh lấy số liệu tổng
+    }
     
-    // Nếu ở trang profile
+    // 2. Nếu đang ở trang CÁ NHÂN (profile.html)
     if (document.getElementById('p-id')) {
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user) {
-            setText('p-id', user.id);
-            setText('p-team', user.team);
-            setText('p-game', user.game);
-            setVal('input-kinah', user.kinah || 0);
-            setVal('input-meso', user.meso || 0);
-        } else {
-            window.location.assign('login.html');
+        if (!user) return window.location.assign('login.html');
+        
+        setText('p-id', user.id);
+        setText('p-team', user.team);
+        setText('p-game', user.game);
+        setVal('input-kinah', user.kinah || 0);
+        setVal('input-meso', user.meso || 0);
+
+        // THÊM NÚT ĐẶC QUYỀN CHO ADMIN: Nút quay lại Dashboard
+        if (user.role === 'admin') {
+            const adminBtn = document.createElement('button');
+            adminBtn.className = "w-full bg-slate-800 text-white p-3 rounded-xl font-bold mt-4 shadow-lg hover:bg-slate-900";
+            adminBtn.innerText = "TRỞ VỀ BẢNG ĐIỀU KHIỂN (ADMIN)";
+            adminBtn.onclick = () => window.location.assign('index.html');
+            document.getElementById('updateBtn').after(adminBtn);
         }
     }
 };
