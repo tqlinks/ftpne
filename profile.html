@@ -124,9 +124,19 @@
                     <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">PC Số (VD: PC01)</label>
                     <input type="text" id="edit-pc" class="w-full p-3 border rounded-xl outline-none bg-slate-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-indigo-500">
                 </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">Avatar URL</label>
-                    <input type="text" id="edit-avatar" class="w-full p-3 border rounded-xl outline-none bg-slate-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-indigo-500" placeholder="https://link-anh.png">
+                <div class="bg-red-50 dark:bg-red-900/10 p-3 rounded-xl border border-red-100 dark:border-red-800/30">
+                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-300 mb-2">Đổi Ảnh Đại Diện (Avatar)</label>
+                    
+                    <a href="https://www.pinterest.com/search/pins/?q=avatar%20cute&rs=ac&len=6&source_id=ac_g7XfZLPM&eq=avatar&etslf=5661" target="_blank" rel="noopener noreferrer" 
+                       class="w-full bg-[#E60023] hover:bg-[#c3001e] text-white py-2.5 rounded-lg font-bold transition flex items-center justify-center gap-2 mb-3 shadow-md text-sm">
+                        <i class="fab fa-pinterest text-lg"></i> TÌM ẢNH TRÊN PINTEREST
+                    </a>
+                    
+                    <input type="text" id="edit-avatar" class="w-full p-3 border rounded-xl outline-none bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-[#E60023] text-sm" placeholder="Dán link ảnh bạn vừa copy vào đây...">
+                    
+                    <p class="text-[10px] text-gray-500 dark:text-gray-400 mt-2 italic flex gap-1">
+                        <i class="fas fa-info-circle mt-0.5"></i> Mẹo: Chuột phải vào ảnh trên Pinterest > Chọn "Sao chép địa chỉ hình ảnh" rồi dán vào ô trên.
+                    </p>
                 </div>
                 <button onclick="handleUpdateProfile()" class="w-full bg-indigo-600 text-white py-3.5 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg mt-5 flex items-center justify-center gap-2">
                     <i class="fas fa-check-circle"></i> XÁC NHẬN CẬP NHẬT
