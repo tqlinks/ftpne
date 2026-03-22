@@ -3,109 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cửa Hàng Linh Thú - FPE Shop</title>
+    <title>Cửa Hàng Linh Thú - Tiêu Điểm FPE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="bg-slate-100 dark:bg-gray-900 min-h-screen p-4 md:p-8 transition-colors duration-300">
-    <div class="max-w-6xl mx-auto">
-        
+    
+    <div class="max-w-7xl mx-auto">
         <div class="flex flex-col md:flex-row justify-between items-center bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg mb-8 border dark:border-gray-700">
             <div class="flex items-center gap-4 mb-4 md:mb-0">
                 <div class="bg-gradient-to-br from-yellow-400 to-orange-500 p-4 rounded-xl shadow-inner">
-                    <i class="fas fa-store text-3xl text-white"></i>
+                    <i class="fas fa-dragon text-3xl text-white"></i>
                 </div>
                 <div>
                     <h1 class="text-2xl font-black text-gray-800 dark:text-white uppercase tracking-wider">Thương Hội Linh Thú</h1>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Dùng FPE để thu phục hộ pháp</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Sử dụng điểm FPE để thu phục linh thú</p>
                 </div>
             </div>
             
             <div class="flex items-center gap-4">
-                <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700/50 px-5 py-2.5 rounded-xl flex items-center gap-2 shadow-sm">
-                    <span class="text-xs font-bold text-yellow-700 dark:text-yellow-500 uppercase">Ví FPE:</span>
-                    <span id="shop-fpe" class="text-xl font-black text-orange-600 dark:text-yellow-400">0</span>
-                    <i class="fas fa-coins text-yellow-500"></i>
+                <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 px-5 py-2 rounded-xl text-center">
+                    <p class="text-[10px] font-bold text-yellow-600 dark:text-yellow-500 uppercase">Ví FPE của bạn</p>
+                    <p class="text-xl font-black text-yellow-700 dark:text-yellow-400">
+                        <span id="shop-fpe">0</span> <i class="fas fa-coins text-yellow-500"></i>
+                    </p>
                 </div>
-                <button onclick="window.location.assign('profile.html')" class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-5 py-2.5 rounded-xl font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition shadow">
-                    <i class="fas fa-arrow-left"></i> Về Hồ Sơ
+                <button onclick="window.location.assign('profile.html')" class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-5 py-3 rounded-xl font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition shadow">
+                    <i class="fas fa-arrow-left"></i> Về Profile
                 </button>
             </div>
         </div>
 
-        <div id="pet-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div id="pet-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             </div>
-
     </div>
 
     <script src="config.js"></script>
-    <script src="script.js"></script>
     <script>
-        // === DATA 8 LINH THÚ ===
-        const petsData = [
-            { id: 'p1', name: 'Hỏa Hồ Ly', element: 'Hỏa', desc: 'Tăng 5% tốc độ farm', price: 50, color: 'text-red-500', bg: 'bg-red-100 dark:bg-red-900/30', border: 'border-red-500', icon: 'fa-fire' },
-            { id: 'p2', name: 'Thủy Giao Long', element: 'Thủy', desc: 'Giảm tỷ lệ kẹt acc', price: 50, color: 'text-blue-500', bg: 'bg-blue-100 dark:bg-blue-900/30', border: 'border-blue-500', icon: 'fa-water' },
-            { id: 'p3', name: 'Phong Mãng Xà', element: 'Phong', desc: 'Tăng tốc chạy về thành', price: 50, color: 'text-teal-500', bg: 'bg-teal-100 dark:bg-teal-900/30', border: 'border-teal-500', icon: 'fa-wind' },
-            { id: 'p4', name: 'Thạch Tinh Sứ', element: 'Thổ', desc: 'Tăng sức chứa rương', price: 50, color: 'text-amber-600', bg: 'bg-amber-100 dark:bg-amber-900/30', border: 'border-amber-600', icon: 'fa-mountain' },
-            { id: 'p5', name: 'Lôi Cuồng Báo', element: 'Lôi', desc: 'X2 Kinah trong 1 giờ', price: 100, color: 'text-purple-500', bg: 'bg-purple-100 dark:bg-purple-900/30', border: 'border-purple-500', icon: 'fa-bolt' },
-            { id: 'p6', name: 'Băng Ma Sói', element: 'Băng', desc: 'Giảm hao mòn vũ khí', price: 100, color: 'text-cyan-400', bg: 'bg-cyan-100 dark:bg-cyan-900/30', border: 'border-cyan-400', icon: 'fa-snowflake' },
-            { id: 'p7', name: 'Quang Thiên Mã', element: 'Quang', desc: 'Bảo hộ khỏi ban 1 lần', price: 300, color: 'text-yellow-400', bg: 'bg-yellow-100 dark:bg-yellow-900/30', border: 'border-yellow-400', icon: 'fa-sun' },
-            { id: 'p8', name: 'Hắc Ma Vương', element: 'Ám', desc: 'Tăng 10% rớt đồ hiếm', price: 300, color: 'text-gray-800 dark:text-gray-300', bg: 'bg-gray-200 dark:bg-gray-700', border: 'border-gray-800 dark:border-gray-500', icon: 'fa-moon' }
+        // DATA: 20 Linh Thú
+        const PETS = [
+            { id: 1, name: "Hỏa Lân", element: "Hỏa (Lửa)", color: "red", icon: "fa-fire", price: 50, desc: "Thiêu rụi mọi chướng ngại." },
+            { id: 2, name: "Thủy Long", element: "Thủy (Nước)", color: "blue", icon: "fa-water", price: 50, desc: "Làm mát dàn PC farm." },
+            { id: 3, name: "Mộc Tinh", element: "Mộc (Cây)", color: "green", icon: "fa-leaf", price: 100, desc: "Tăng tỷ lệ rớt đồ thiên nhiên." },
+            { id: 4, name: "Kim Điểu", element: "Kim (Kim loại)", color: "yellow", icon: "fa-ring", price: 100, desc: "Hút vàng và Meso cực nhanh." },
+            { id: 5, name: "Thổ Hùng", element: "Thổ (Đất)", color: "amber", icon: "fa-mountain", price: 150, desc: "Bảo vệ acc không bị ban." },
+            { id: 6, name: "Phong Mâu", element: "Phong (Gió)", color: "teal", icon: "fa-wind", price: 150, desc: "Tăng tốc độ di chuyển chạy map." },
+            { id: 7, name: "Lôi Thú", element: "Lôi (Sét)", color: "purple", icon: "fa-bolt", price: 200, desc: "Đánh quái giật tung nóc." },
+            { id: 8, name: "Băng Hồ", element: "Băng (Tuyết)", color: "cyan", icon: "fa-snowflake", price: 200, desc: "Đóng băng thời gian chờ (Cooldown)." },
+            { id: 9, name: "Quang Linh", element: "Ánh Sáng", color: "yellow", icon: "fa-sun", price: 300, desc: "Soi sáng những bãi farm ẩn." },
+            { id: 10, name: "Ám Yêu", element: "Bóng Tối", color: "gray", icon: "fa-moon", price: 300, desc: "Trốn tránh tầm nhìn của GM." },
+            { id: 11, name: "Độc Nhện", element: "Độc (Poison)", color: "emerald", icon: "fa-spider", price: 400, desc: "Gây sát thương duy trì lên Boss." },
+            { id: 12, name: "Huyết Ma", element: "Máu (Blood)", color: "rose", icon: "fa-tint", price: 400, desc: "Hút máu quái hồi HP cho acc." },
+            { id: 13, name: "Âm Dơi", element: "Âm Thanh", color: "indigo", icon: "fa-music", price: 500, desc: "Phát hiện Boss từ khoảng cách xa." },
+            { id: 14, name: "Ảo Mộng", element: "Ảo Ảnh", color: "fuchsia", icon: "fa-eye", price: 500, desc: "Tạo clone ảo lừa quái vật." },
+            { id: 15, name: "Nham Cẩu", element: "Dung Nham", color: "orange", icon: "fa-volcano", price: 750, desc: "Gây sát thương diện rộng (AoE)." },
+            { id: 16, name: "Pha Lê Dực", element: "Tinh Thể", color: "sky", icon: "fa-gem", price: 750, desc: "Nhân đôi tỷ lệ rơi đá quý." },
+            { id: 17, name: "Không Gian Thú", element: "Không Gian", color: "slate", icon: "fa-meteor", price: 1000, desc: "Dịch chuyển tức thời đến bãi VIP." },
+            { id: 18, name: "Thời Gian Chiếu", element: "Thời Gian", color: "pink", icon: "fa-hourglass-half", price: 1500, desc: "Xóa bỏ thời gian hồi sinh." },
+            { id: 19, name: "Sinh Mệnh Thụ", element: "Sinh Mệnh", color: "lime", icon: "fa-heart", price: 2000, desc: "Bảo hộ bất tử cho tổ đội." },
+            { id: 20, name: "Hỗn Độn Vương", element: "Hỗn Độn", color: "red", icon: "fa-biohazard", price: 5000, desc: "Linh thú tối thượng. Càn quét mọi server." }
         ];
 
-        // Khởi tạo trang
-        window.addEventListener('DOMContentLoaded', () => {
-            const user = JSON.parse(localStorage.getItem('user'));
-            if (!user) return window.location.assign('login.html');
-            
-            // Hiện FPE
-            document.getElementById('shop-fpe').innerText = user.fpe || 0;
+        let currentUser = null;
 
-            // Render danh sách thú
+        window.onload = () => {
+            currentUser = JSON.parse(localStorage.getItem('user'));
+            if (!currentUser) return window.location.assign('login.html');
+            
+            document.getElementById('shop-fpe').innerText = currentUser.fpe || 0;
+            renderPets();
+        };
+
+        function renderPets() {
             const grid = document.getElementById('pet-grid');
-            grid.innerHTML = petsData.map(pet => `
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border-2 border-transparent hover:${pet.border} transition-all duration-300 overflow-hidden group">
-                    <div class="h-40 ${pet.bg} flex items-center justify-center relative overflow-hidden">
-                        <i class="fas ${pet.icon} text-6xl ${pet.color} group-hover:scale-110 transition-transform duration-300 opacity-80"></i>
-                        <span class="absolute top-2 right-2 ${pet.bg} ${pet.color} text-[10px] font-black px-2 py-1 rounded border ${pet.border}">
-                            HỆ ${pet.element.toUpperCase()}
-                        </span>
+            const userPets = (currentUser.pets || "").split(",").map(p => p.trim());
+
+            grid.innerHTML = PETS.map(pet => {
+                const isOwned = userPets.includes(pet.name);
+                const canAfford = (currentUser.fpe || 0) >= pet.price;
+                
+                // Nút trạng thái
+                let btnHTML = '';
+                if (isOwned) {
+                    btnHTML = `<button disabled class="w-full bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 py-3 rounded-xl font-bold cursor-not-allowed">ĐÃ SỞ HỮU</button>`;
+                } else if (canAfford) {
+                    btnHTML = `<button id="btn-${pet.id}" onclick="buyPet(${pet.id}, ${pet.price}, '${pet.name}')" class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-3 rounded-xl font-bold shadow-lg transition transform hover:-translate-y-1 active:translate-y-0">
+                                <i class="fas fa-shopping-cart"></i> MUA (${pet.price} FPE)
+                               </button>`;
+                } else {
+                    btnHTML = `<button disabled class="w-full bg-red-100 dark:bg-red-900/30 text-red-500 dark:text-red-400 py-3 rounded-xl font-bold cursor-not-allowed border border-red-200 dark:border-red-800">KHÔNG ĐỦ FPE</button>`;
+                }
+
+                return `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border dark:border-gray-700 overflow-hidden flex flex-col transform transition hover:scale-105">
+                    <div class="h-40 bg-${pet.color}-100 dark:bg-${pet.color}-900/20 flex items-center justify-center border-b dark:border-gray-700 relative overflow-hidden">
+                        <i class="fas ${pet.icon} text-6xl text-${pet.color}-500 dark:text-${pet.color}-400 drop-shadow-md z-10"></i>
+                        <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-${pet.color}-300 dark:bg-${pet.color}-700 opacity-20 rounded-full blur-2xl"></div>
                     </div>
                     
-                    <div class="p-5">
-                        <h3 class="text-lg font-black text-gray-800 dark:text-white mb-1">${pet.name}</h3>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-4 h-8">${pet.desc}</p>
-                        
-                        <button onclick="buyPet('${pet.id}', ${pet.price}, '${pet.name}')" class="w-full flex justify-between items-center bg-gray-100 dark:bg-gray-700 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 text-gray-800 dark:text-white px-4 py-3 rounded-xl font-bold transition">
-                            <span>Mua ngay</span>
-                            <span class="text-orange-600 dark:text-yellow-400 font-black">${pet.price} <i class="fas fa-coins text-sm"></i></span>
-                        </button>
+                    <div class="p-5 flex-grow flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-black text-gray-800 dark:text-white">${pet.name}</h3>
+                                <span class="text-[10px] font-bold bg-${pet.color}-100 dark:bg-${pet.color}-900/40 text-${pet.color}-700 dark:text-${pet.color}-300 px-2 py-1 rounded">
+                                    ${pet.element}
+                                </span>
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">${pet.desc}</p>
+                        </div>
+                        ${btnHTML}
                     </div>
-                </div>
-            `).join('');
-        });
+                </div>`;
+            }).join('');
+        }
 
-        // Xử lý mua hàng
-        function buyPet(petId, price, petName) {
-            const user = JSON.parse(localStorage.getItem('user'));
-            const currentFpe = Number(user.fpe) || 0;
+        async function buyPet(petId, price, petName) {
+            const confirmBuy = confirm(`Bạn có chắc muốn dùng ${price} FPE để thu phục [${petName}] không?`);
+            if (!confirmBuy) return;
 
-            if (currentFpe < price) {
-                alert(`❌ Bạn không đủ FPE! Cần thêm ${price - currentFpe} FPE nữa để mua ${petName}. Hãy chăm chỉ điểm danh nhé!`);
-                return;
-            }
+            const btn = document.getElementById(`btn-${petId}`);
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang giao dịch...';
 
-            if(confirm(`Bạn có chắc chắn muốn chi ${price} FPE để thu phục [${petName}]?`)) {
-                // Trừ tiền nội bộ
-                user.fpe = currentFpe - price;
-                
-                // [TƯƠNG LAI]: Lưu ID pet vào mảng user.pets để biết họ đã sở hữu
-                
-                localStorage.setItem('user', JSON.stringify(user));
-                document.getElementById('shop-fpe').innerText = user.fpe;
-                
-                // [Ghi chú cho Code.gs]: Gọi API trừ tiền trên Excel ở đây
-                alert(`🎉 Chúc mừng! Bạn đã thu phục thành công ${petName}!`);
+            try {
+                const res = await fetch(CONFIG.SCRIPT_URL, {
+                    method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({ action: "buy_pet", id: currentUser.id, cost: price, petName: petName })
+                });
+
+                // Cập nhật LocalStorage
+                currentUser.fpe -= price;
+                currentUser.pets = currentUser.pets ? currentUser.pets + ", " + petName : petName;
+                localStorage.setItem('user', JSON.stringify(currentUser));
+
+                alert(`🎉 Thu phục thành công Linh Thú: ${petName}!`);
+                document.getElementById('shop-fpe').innerText = currentUser.fpe;
+                renderPets(); // Tải lại lưới linh thú
+            } catch (e) {
+                alert("Lỗi kết nối máy chủ! Không thể mua.");
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fas fa-shopping-cart"></i> MUA (${price} FPE)`;
             }
         }
     </script>
