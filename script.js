@@ -127,3 +127,40 @@ function logout() {
     localStorage.removeItem('user');
     window.location.assign('login.html');
 }
+// --- XỬ LÝ GỬI FORM ĐĂNG KÝ ---
+const registerForm = document.getElementById('registerForm');
+if (registerForm) {
+    registerForm.addEventListener('submit', async function(e) {
+        e.preventDefault(); // Chặn tải lại trang
+        const btn = document.getElementById('regBtn');
+        btn.disabled = true; 
+        btn.innerText = "Đang xử lý...";
+
+        const payload = {
+            action: "register",
+            id: document.getElementById('reg-id').value,
+            email: document.getElementById('reg-email').value,
+            phone: document.getElementById('reg-phone').value,
+            pc: document.getElementById('reg-pc').value,
+            team: document.getElementById('reg-team').value,
+            game: document.getElementById('reg-game').value,
+            password: document.getElementById('reg-pass').value
+        };
+
+        try {
+            await fetch(CONFIG.SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Gửi nền không cần đợi Google phản hồi JSON
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(payload)
+            });
+            alert("Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ.");
+            window.location.assign('login.html');
+        } catch (error) {
+            alert("Lỗi mạng! Không thể gửi thông tin đăng ký.");
+        } finally {
+            btn.disabled = false; 
+            btn.innerText = "ĐĂNG KÝ TÀI KHOẢN";
+        }
+    });
+}
