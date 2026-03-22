@@ -12,16 +12,16 @@ async function fetchDashboardStats() {
         const response = await fetch(CONFIG.SCRIPT_URL);
         const data = await response.json();
 
-        // Kiểm tra phần tử có tồn tại trên trang hiện tại không mới gán giá trị
-        const elTotal = document.getElementById('stat-total');
-        const elAion2 = document.getElementById('stat-aion2');
-        const elMaple = document.getElementById('stat-maple');
-        const elTeams = document.getElementById('stat-teams');
+        // Kiểm tra sự tồn tại của phần tử trước khi gán giá trị
+        const updateText = (id, value) => {
+            const el = document.getElementById(id);
+            if (el) el.innerText = value;
+        };
 
-        if (elTotal) elTotal.innerText = data.total || 0;
-        if (elAion2) elAion2.innerText = data.aion2 || 0;
-        if (elMaple) elMaple.innerText = data.maple || 0;
-        if (elTeams) elTeams.innerText = data.teams || "0 / 0 / 0";
+        updateText('stat-total', data.total || 0);
+        updateText('stat-aion2', data.aion2 || 0);
+        updateText('stat-maple', data.maple || 0);
+        updateText('stat-teams', data.teams || "0 / 0 / 0");
         
     } catch (error) {
         console.error("Lỗi cập nhật Dashboard:", error);
