@@ -2,31 +2,66 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Đăng Ký Thành Viên</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Ký Tài Khoản</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css">
 </head>
-<body class="p-4 md:p-8 bg-slate-50">
-    <div class="card p-8 max-w-2xl mx-auto shadow-xl">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">Đăng Ký Nhân Viên Mới</h2>
-        <form id="registrationForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <input type="text" name="id" placeholder="ID Nhân Viên" class="input-field" required>
-            <input type="email" name="email" placeholder="Email" class="input-field" required>
-            <select name="game" class="input-field bg-white" required>
-                <option value="Aion 2">Aion 2</option>
-                <option value="MapleStory">MapleStory</option>
-            </select>
-            <select name="team" class="input-field bg-white" required>
-                <option value="Team A">Team A</option>
-                <option value="Team B">Team B</option>
-                <option value="Team C">Team C</option>
-            </select>
-            <input type="password" name="password" placeholder="Mật khẩu" class="input-field md:col-span-2" required>
-            <button type="submit" id="submitBtn" class="md:col-span-2 bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700">
-                XÁC NHẬN ĐĂNG KÝ
+<body class="bg-slate-800 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white p-8 rounded-2xl w-full max-w-lg shadow-2xl">
+        <h2 class="text-2xl font-bold text-center text-slate-800 mb-6 uppercase tracking-wider">Đăng Ký Nhân Viên</h2>
+        
+        <form id="registerForm" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">ID Nhân Viên *</label>
+                    <input type="text" id="reg-id" required class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">Số PC đảm nhận *</label>
+                    <input type="text" id="reg-pc" required placeholder="VD: PC01 - PC05" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">Email *</label>
+                <input type="email" id="reg-email" required class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">Số điện thoại</label>
+                <input type="text" id="reg-phone" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">Team</label>
+                    <select id="reg-team" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50">
+                        <option value="Team A">Team A</option>
+                        <option value="Team B">Team B</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">Game cày chính</label>
+                    <select id="reg-game" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50">
+                        <option value="Aion 2">Aion 2</option>
+                        <option value="MapleStory">MapleStory</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">Mật khẩu *</label>
+                <input type="password" id="reg-pass" required class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50">
+            </div>
+
+            <button type="submit" id="regBtn" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-md mt-4">
+                ĐĂNG KÝ TÀI KHOẢN
             </button>
         </form>
-        <p class="text-center mt-4 text-gray-500">Đã có tài khoản? <a href="login.html" class="text-indigo-600 font-bold">Quay lại đăng nhập</a></p>
+
+        <div class="text-center mt-4">
+            <a href="login.html" class="text-sm text-gray-500 hover:text-indigo-600 font-bold">← Quay lại Đăng Nhập</a>
+        </div>
     </div>
 
     <script src="config.js"></script>
