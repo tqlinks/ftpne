@@ -12,19 +12,22 @@ async function fetchDashboardStats() {
         const response = await fetch(CONFIG.SCRIPT_URL);
         const data = await response.json();
 
-        // Kiểm tra sự tồn tại của phần tử trước khi gán giá trị
-        const updateText = (id, value) => {
-            const el = document.getElementById(id);
-            if (el) el.innerText = value;
-        };
+        // Chỉ cập nhật nếu tìm thấy ID trên trang hiện tại
+        const elTotal = document.getElementById('stat-total');
+        if (elTotal) elTotal.innerText = data.total || 0;
+        
+        const elAion = document.getElementById('stat-aion2');
+        if (elAion) elAion.innerText = data.aion2 || 0;
 
-        updateText('stat-total', data.total || 0);
-        updateText('stat-aion2', data.aion2 || 0);
-        updateText('stat-maple', data.maple || 0);
-        updateText('stat-teams', data.teams || "0 / 0 / 0");
+        const elMaple = document.getElementById('stat-maple');
+        if (elMaple) elMaple.innerText = data.maple || 0;
+
+        const elTeams = document.getElementById('stat-teams');
+        if (elTeams) elTeams.innerText = data.teams || "0/0/0";
         
     } catch (error) {
-        console.error("Lỗi cập nhật Dashboard:", error);
+        // Không báo lỗi ra màn hình nếu không có phần tử
+        console.warn("Trang này không có Dashboard để cập nhật.");
     }
 }
 
