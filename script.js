@@ -218,12 +218,9 @@ function logout() { localStorage.removeItem('user'); window.location.href = 'log
 // ==========================================
 
 // 1. Tải dữ liệu chi tiết lên bảng Admin
+// Dòng 223 fix lỗi u is not defined
 async function fetchAdminDetailedData() {
     const tbody = document.getElementById('admin-table-body');
-    const cCurr = Number(u.char45) || 0;
-            const cGoal = Number(u.cGoal) || 0;
-            const cPercent = cGoal > 0 ? Math.min(100, Math.round((cCurr / cGoal) * 100)) : 0;
-            const cColor = cPercent >= 100 ? 'bg-green-500' : 'bg-orange-500';
     if (!tbody) return;
 
     try {
@@ -231,56 +228,49 @@ async function fetchAdminDetailedData() {
         const list = await res.json();
         
         tbody.innerHTML = list.map(u => {
+            // Định nghĩa an toàn các biến từ đối tượng u
             const avatarImg = u.avatar || 'https://i.pravatar.cc/150?u=' + u.id;
             
-            // Tính % Kinah
-            const kCurr = Number(u.kinah) || 0;
-            const kGoal = Number(u.kGoal) || 0;
-            const kPercent = kGoal > 0 ? Math.min(100, Math.round((kCurr / kGoal) * 100)) : 0;
-            const kColor = kPercent >= 100 ? 'bg-green-500' : 'bg-purple-500';
+            // Tính toán % tiến độ
+            const calc = (curr, goal) => {
+                const c = Number(curr) || 0;
+                const g = Number(goal) || 0;
+                return g > 0 ? Math.min(100, Math.round((c / g) * 100)) : 0;
+            };
 
-            // Tính % Meso
-            const mCurr = Number(u.meso) || 0;
-            const mGoal = Number(u.mGoal) || 0;
-            const mPercent = mGoal > 0 ? Math.min(100, Math.round((mCurr / mGoal) * 100)) : 0;
-            const mColor = mPercent >= 100 ? 'bg-green-500' : 'bg-blue-500';
+            const kP = calc(u.kinah, u.kGoal);
+            const mP = calc(u.meso, u.mGoal);
+            const cP = calc(u.char45, u.cGoal); // Mới: Tiến độ Lv45
 
             return `
-            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition dark:text-gray-300">
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition dark:text-gray-300 border-b dark:border-gray-700">
                 <td class="p-4">
                     <div class="flex items-center gap-3">
-                        <img src="${avatarImg}" class="w-10 h-10 rounded-full border-2 border-gray-200 dark:border-gray-600 object-cover">
-                        <div>
-                            <p class="font-black text-gray-800 dark:text-white">${u.id}</p>
-                        </div>
+                        <img src="${avatarImg}" class="w-10 h-10 rounded-full border shadow-sm object-cover">
+                        <span class="font-black">${u.id}</span>
                     </div>
                 </td>
-                <td class="p-4">
-                    <span class="px-2 py-1 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 text-xs font-bold rounded">${u.team}</span><br>
-                    <span class="text-xs text-gray-500 dark:text-gray-400 mt-1 inline-block">${u.game}</span>
+                <td class="p-4 text-xs">
+                    <b class="text-indigo-600">${u.team}</b><br>${u.pc || 'No PC'}
                 </td>
                 <td class="p-4">
-                    <div class="flex justify-between text-xs mb-1">
-                        <span class="font-bold">${kCurr} / ${kGoal} M</span>
-                        <span class="text-purple-600 dark:text-purple-400 font-bold">${kPercent}%</span>
+                    <div class="flex justify-between text-[10px] mb-1">
+                        <span>${u.kinah}/${u.kGoal}M</span><span class="font-bold">${kP}%</span>
                     </div>
-                    <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                        <div class="${kColor} h-2 rounded-full" style="width: ${kPercent}%"></div>
+                    <div class="w-full bg-gray-200 dark:bg-gray-600 h-1.5 rounded-full">
+                        <div class="bg-purple-500 h-1.5 rounded-full" style="width: ${kP}%"></div>
                     </div>
                 </td>
-                <td class="p-4">
-                    <div class="flex justify-between text-xs mb-1">
-                        <span class="font-bold">${mCurr} / ${mGoal} B</span>
-                        <span class="text-blue-600 dark:text-blue-400 font-bold">${mPercent}%</span>
-                    </div>
-                    <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                        <div class="${mColor} h-2 rounded-full" style="width: ${mPercent}%"></div>
+                <td class="p-4 text-center font-bold text-orange-500">
+                    ${u.char45} <small class="text-gray-400">/ ${u.cGoal}</small>
+                    <div class="w-full bg-gray-100 dark:bg-gray-600 h-1 rounded-full mt-1">
+                        <div class="bg-orange-500 h-1 rounded-full" style="width: ${cP}%"></div>
                     </div>
                 </td>
             </tr>`;
         }).join('');
     } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-500 font-bold">Lỗi tải dữ liệu!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-500">Lỗi: ${e.message}</td></tr>`;
     }
 }
 
