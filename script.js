@@ -138,7 +138,29 @@ async function handleLogin() {
         btn.innerText = "ĐĂNG NHẬP";
     }
 }
+async function fetchDashboardStats() {
+    try {
+        const res = await fetch(CONFIG.SCRIPT_URL);
+        const data = await res.json();
+        
+        const update = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.innerText = val;
+        };
 
+        update('stat-total', data.total || 0);
+        update('stat-aion2', data.aion2 || 0);
+        update('stat-maple', data.maple || 0);
+        update('stat-teams', data.teams || "0/0/0");
+    } catch (e) {
+        console.warn("Dashboard không có trên trang này.");
+    }
+}
+
+// Tự động chạy stats nếu có thẻ id trên trang
+if (document.getElementById('stat-total')) {
+    fetchDashboardStats();
+}
 // XỬ LÝ CẬP NHẬT SẢN LƯỢNG
 async function updateProduction() {
     const user = JSON.parse(localStorage.getItem('user'));
