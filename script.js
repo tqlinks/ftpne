@@ -6,16 +6,23 @@ const SCRIPT_URL = CONFIG.SCRIPT_URL;
 
 
 // 1. Hàm lấy dữ liệu thống kê từ Google Sheet (GET)
+// Cập nhật hàm fetchDashboardStats để không bị lỗi trên các trang không có dashboard
 async function fetchDashboardStats() {
     try {
-        const response = await fetch(SCRIPT_URL);
+        const response = await fetch(CONFIG.SCRIPT_URL);
         const data = await response.json();
 
-        // Cập nhật dữ liệu vào giao diện
-        document.getElementById('stat-total').innerText = data.total || 0;
-        document.getElementById('stat-aion2').innerText = data.aion2 || 0;
-        document.getElementById('stat-maple').innerText = data.maple || 0;
-        document.getElementById('stat-teams').innerText = data.teams || "0 / 0 / 0";
+        // Kiểm tra phần tử có tồn tại trên trang hiện tại không mới gán giá trị
+        const elTotal = document.getElementById('stat-total');
+        const elAion2 = document.getElementById('stat-aion2');
+        const elMaple = document.getElementById('stat-maple');
+        const elTeams = document.getElementById('stat-teams');
+
+        if (elTotal) elTotal.innerText = data.total || 0;
+        if (elAion2) elAion2.innerText = data.aion2 || 0;
+        if (elMaple) elMaple.innerText = data.maple || 0;
+        if (elTeams) elTeams.innerText = data.teams || "0 / 0 / 0";
+        
     } catch (error) {
         console.error("Lỗi cập nhật Dashboard:", error);
     }
