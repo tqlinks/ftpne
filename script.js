@@ -189,7 +189,7 @@ async function updateProduction() {
     alert("Gửi thông tin thành công!");
     regForm.reset();
     if(document.getElementById('stat-total')) fetchDashboardStats();
-});.finally(() => {
+});finally(() => {
         btn.disabled = false;
         btn.innerText = "LƯU SẢN LƯỢNG MỚI";
     });
