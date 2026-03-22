@@ -1,5 +1,5 @@
 const APP_CONFIG = {
     APP_NAME: "Game Team Manager",
-    API_URL: "https://script.google.com/macros/s/AKfycbxAwgFgId1sozjEphwxHJqWmFmYW2xlZqsygoKHcTnYp4tEJdxYmwPsZxSvkBr-VN_5Nw/exec",
-    REFRESH_RATE: 60000 // 1 phút cập nhật 1 lần
+    API_URL: "https://script.google.com/macros/s/AKfycbzN2tBFgiKb3mMA1WhN2VV_lJUKMIf-UsVK7TMwNhxbqP6IyYEkCO3G9tITvFJp1mmJ2A/exec",
+    REFRESH_RATE: 10000 // 1 phút cập nhật 1 lần
 };
