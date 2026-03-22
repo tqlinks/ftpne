@@ -65,24 +65,27 @@ function updateProgressBar(idBar, idText, current, goal) {
 }
 
 // 5. [Giữ nguyên] Lưu sản lượng Kinah/Meso
+// TRONG HÀM updateProduction(): Thêm lấy biến input-char45 và đẩy lên server
 async function updateProduction() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user) return window.location.assign('login.html');
     const kinah = document.getElementById('input-kinah').value;
     const meso = document.getElementById('input-meso').value;
+    const char45 = document.getElementById('input-char45').value; // MỚI
     const btn = document.getElementById('updateBtn');
+    
     btn.disabled = true; btn.innerText = "Đang lưu...";
     try {
         await fetch(CONFIG.SCRIPT_URL, {
             method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
-            body: JSON.stringify({ action: "update_prod", id: user.id, kinah: kinah, meso: meso })
+            body: JSON.stringify({ action: "update_prod", id: user.id, kinah: kinah, meso: meso, char45: char45 }) // GỬI THÊM CHAR45
         });
-        user.kinah = kinah; user.meso = meso;
+        user.kinah = kinah; user.meso = meso; user.char45 = char45; // Lưu vào biến cục bộ
         localStorage.setItem('user', JSON.stringify(user));
         alert("Cập nhật sản lượng thành công!");
-        window.location.reload(); // Reload để cập nhật thanh tiến độ
-    } catch (e) { alert("Lỗi khi gửi dữ liệu!");
-    } finally { btn.disabled = false; btn.innerText = "LƯU SẢN LƯỢNG MỚI"; }
+        window.location.reload(); 
+    } catch (e) { alert("Lỗi khi gửi dữ liệu!"); } 
+    finally { btn.disabled = false; btn.innerText = "LƯU SẢN LƯỢNG MỚI"; }
 }
 
 // === PHẦN MỚI NÂNG CẤP ===
@@ -175,6 +178,12 @@ window.onload = () => {
             setText('p-pc', user.pc || "Chưa phân công");
             setVal('input-kinah', user.kinah || 0);
             setVal('input-meso', user.meso || 0);
+            setVal('input-char45', user.char45 || 0);
+
+            // ... (Dưới updateProgressBar meso)
+            setText('prog-c-current', user.char45 || 0);
+            setText('prog-c-goal', user.cGoal || 0);
+            updateProgressBar('bar-char45', 'txt-bar-char45', user.char45, user.cGoal);
             
             // Nạp Avatar (Mới)
             const avatarEl = document.getElementById('p-avatar');
@@ -211,6 +220,10 @@ function logout() { localStorage.removeItem('user'); window.location.href = 'log
 // 1. Tải dữ liệu chi tiết lên bảng Admin
 async function fetchAdminDetailedData() {
     const tbody = document.getElementById('admin-table-body');
+    const cCurr = Number(u.char45) || 0;
+            const cGoal = Number(u.cGoal) || 0;
+            const cPercent = cGoal > 0 ? Math.min(100, Math.round((cCurr / cGoal) * 100)) : 0;
+            const cColor = cPercent >= 100 ? 'bg-green-500' : 'bg-orange-500';
     if (!tbody) return;
 
     try {
@@ -272,31 +285,30 @@ async function fetchAdminDetailedData() {
 }
 
 // 2. Cập nhật KPI cho Team
+// TRONG HÀM submitTeamGoals(): Thêm gửi kpi-char45
 async function submitTeamGoals() {
     const team = document.getElementById('kpi-team').value;
     const kGoal = document.getElementById('kpi-kinah').value;
     const mGoal = document.getElementById('kpi-meso').value;
+    const cGoal = document.getElementById('kpi-char45').value; // MỚI
     const btn = document.getElementById('kpi-btn');
 
-    if (!kGoal && !mGoal) return alert("Vui lòng nhập ít nhất 1 mục tiêu (Kinah hoặc Meso)!");
-
+    if (!kGoal && !mGoal && !cGoal) return alert("Vui lòng nhập ít nhất 1 mục tiêu!");
     btn.disabled = true; btn.innerText = "Đang xử lý...";
-
     try {
         await fetch(CONFIG.SCRIPT_URL, {
             method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
-            body: JSON.stringify({ action: "update_team_goals", team: team, kGoal: kGoal, mGoal: mGoal })
+            body: JSON.stringify({ action: "update_team_goals", team: team, kGoal: kGoal, mGoal: mGoal, cGoal: cGoal }) // GỬI THÊM cGoal
         });
         alert(`Đã cập nhật KPI thành công cho: ${team}`);
         document.getElementById('kpi-kinah').value = '';
         document.getElementById('kpi-meso').value = '';
-        fetchAdminDetailedData(); // Tải lại bảng
-    } catch (e) {
-        alert("Lỗi khi gửi dữ liệu!");
-    } finally {
-        btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-double"></i> CẬP NHẬT KPI';
-    }
+        document.getElementById('kpi-char45').value = '';
+        fetchAdminDetailedData(); 
+    } catch (e) { alert("Lỗi khi gửi dữ liệu!"); } 
+    finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-double"></i> CẬP NHẬT KPI'; }
 }
+
 
 // 3. SỬA LẠI HÀM WINDOW.ONLOAD ĐỂ CHẶN BẢO MẬT TRANG ADMIN
 const originalOnload = window.onload;
