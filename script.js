@@ -37,8 +37,15 @@ async function handleLogin() {
         const data = await res.json();
         
         if (data.status === "success") {
+            // 1. Lưu thông tin người dùng vào bộ nhớ trình duyệt
             localStorage.setItem('user', JSON.stringify(data.user));
-            window.location.assign('profile.html');
+            
+            // 2. Hiện thông báo (Tùy chọn, bạn có thể xóa dòng alert này đi cho mượt)
+            alert("Đăng nhập thành công! Chuyển tới trang cá nhân...");
+            
+            // 3. LỆNH CHUYỂN HƯỚNG QUAN TRỌNG NHẤT
+            window.location.href = 'profile.html'; 
+            
         } else {
             alert(data.message);
         }
