@@ -203,3 +203,127 @@ window.onload = () => {
 };
 
 function logout() { localStorage.removeItem('user'); window.location.href = 'login.html'; }
+// ==========================================
+// KHOẢNG MÃ DÀNH RIÊNG CHO QUẢN TRỊ (ADMIN)
+// ==========================================
+
+// 1. Tải dữ liệu chi tiết lên bảng Admin
+async function fetchAdminDetailedData() {
+    const tbody = document.getElementById('admin-table-body');
+    if (!tbody) return;
+
+    try {
+        const res = await fetch(`${CONFIG.SCRIPT_URL}?action=get_admin`);
+        const list = await res.json();
+        
+        tbody.innerHTML = list.map(u => {
+            const avatarImg = u.avatar || 'https://i.pravatar.cc/150?u=' + u.id;
+            
+            // Tính % Kinah
+            const kCurr = Number(u.kinah) || 0;
+            const kGoal = Number(u.kGoal) || 0;
+            const kPercent = kGoal > 0 ? Math.min(100, Math.round((kCurr / kGoal) * 100)) : 0;
+            const kColor = kPercent >= 100 ? 'bg-green-500' : 'bg-purple-500';
+
+            // Tính % Meso
+            const mCurr = Number(u.meso) || 0;
+            const mGoal = Number(u.mGoal) || 0;
+            const mPercent = mGoal > 0 ? Math.min(100, Math.round((mCurr / mGoal) * 100)) : 0;
+            const mColor = mPercent >= 100 ? 'bg-green-500' : 'bg-blue-500';
+
+            return `
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition dark:text-gray-300">
+                <td class="p-4">
+                    <div class="flex items-center gap-3">
+                        <img src="${avatarImg}" class="w-10 h-10 rounded-full border-2 border-gray-200 dark:border-gray-600 object-cover">
+                        <div>
+                            <p class="font-black text-gray-800 dark:text-white">${u.id}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="p-4">
+                    <span class="px-2 py-1 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 text-xs font-bold rounded">${u.team}</span><br>
+                    <span class="text-xs text-gray-500 dark:text-gray-400 mt-1 inline-block">${u.game}</span>
+                </td>
+                <td class="p-4">
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="font-bold">${kCurr} / ${kGoal} M</span>
+                        <span class="text-purple-600 dark:text-purple-400 font-bold">${kPercent}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                        <div class="${kColor} h-2 rounded-full" style="width: ${kPercent}%"></div>
+                    </div>
+                </td>
+                <td class="p-4">
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="font-bold">${mCurr} / ${mGoal} B</span>
+                        <span class="text-blue-600 dark:text-blue-400 font-bold">${mPercent}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                        <div class="${mColor} h-2 rounded-full" style="width: ${mPercent}%"></div>
+                    </div>
+                </td>
+            </tr>`;
+        }).join('');
+    } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-500 font-bold">Lỗi tải dữ liệu!</td></tr>`;
+    }
+}
+
+// 2. Cập nhật KPI cho Team
+async function submitTeamGoals() {
+    const team = document.getElementById('kpi-team').value;
+    const kGoal = document.getElementById('kpi-kinah').value;
+    const mGoal = document.getElementById('kpi-meso').value;
+    const btn = document.getElementById('kpi-btn');
+
+    if (!kGoal && !mGoal) return alert("Vui lòng nhập ít nhất 1 mục tiêu (Kinah hoặc Meso)!");
+
+    btn.disabled = true; btn.innerText = "Đang xử lý...";
+
+    try {
+        await fetch(CONFIG.SCRIPT_URL, {
+            method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({ action: "update_team_goals", team: team, kGoal: kGoal, mGoal: mGoal })
+        });
+        alert(`Đã cập nhật KPI thành công cho: ${team}`);
+        document.getElementById('kpi-kinah').value = '';
+        document.getElementById('kpi-meso').value = '';
+        fetchAdminDetailedData(); // Tải lại bảng
+    } catch (e) {
+        alert("Lỗi khi gửi dữ liệu!");
+    } finally {
+        btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-double"></i> CẬP NHẬT KPI';
+    }
+}
+
+// 3. SỬA LẠI HÀM WINDOW.ONLOAD ĐỂ CHẶN BẢO MẬT TRANG ADMIN
+const originalOnload = window.onload;
+window.onload = () => {
+    if (originalOnload) originalOnload(); // Chạy các lệnh cũ (load Profile, Index)
+
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    // Bổ sung nút Admin vào trang Profile (Nếu là Admin)
+    if (document.getElementById('p-id') && user && user.role === 'admin') {
+        // Kiểm tra tránh tạo trùng nút
+        if (!document.getElementById('btn-go-admin')) {
+            const adminBtn = document.createElement('button');
+            adminBtn.id = 'btn-go-admin';
+            adminBtn.className = "w-full bg-slate-900 dark:bg-black text-white p-4 rounded-xl font-bold mt-4 shadow-xl hover:bg-slate-800 transition-all flex items-center justify-center gap-2 border border-slate-700";
+            adminBtn.innerHTML = '<i class="fas fa-crown text-yellow-400 text-xl"></i> QUẢN TRỊ HỆ THỐNG (ADMIN)';
+            adminBtn.onclick = () => window.location.assign('admin.html');
+            document.getElementById('updateBtn').after(adminBtn);
+        }
+    }
+
+    // Bảo mật trang Admin
+    if (document.getElementById('admin-dashboard')) {
+        if (!user || user.role !== 'admin') {
+            alert("CẢNH BÁO BẢO MẬT: Bạn không có quyền truy cập khu vực này!");
+            window.location.replace('profile.html');
+            return;
+        }
+        fetchAdminDetailedData();
+    }
+};
