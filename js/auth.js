@@ -12,7 +12,10 @@ async function handleLogin() {
     btn.disabled = true; btn.innerText = "Đang kiểm tra...";
     try {
         const url = `${CONFIG.SCRIPT_URL}?action=login&id=${encodeURIComponent(id)}&pass=${encodeURIComponent(pass)}`;
-        const res = await fetch(url);
+        const res = await fetch(url, {
+    method: 'GET',
+    redirect: 'follow' // Ép trình duyệt đi theo link chuyển hướng của Google
+});
         const data = await res.json();
         if (data.status === "success") {
             localStorage.setItem('user', JSON.stringify(data.user));
