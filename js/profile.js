@@ -1,28 +1,26 @@
-// --- profile.js ---
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Kiểm tra nhanh ở LocalStorage để tránh giật trang
+    const localUser = JSON.parse(localStorage.getItem('user'));
+    if (!localUser) {
+        window.location.assign('login.html');
+        return;
+    }
 
-async function fetchStats() { /* Copy ruột fetchStats */ }
-function updateProgressBar(idBar, idText, current, goal) { /* Copy ruột updateProgressBar */ }
-async function updateProduction() { /* Copy ruột updateProduction */ }
-function openEditModal() { /* Copy ruột openEditModal */ }
-function closeEditModal() { /* Copy ruột closeEditModal */ }
-async function handleUpdateProfile() { /* Copy ruột handleUpdateProfile */ }
-async function handleCheckIn() { /* Copy ruột handleCheckIn */ }
-function renderProfile() { /* Copy ruột renderProfile */ }
-async function releasePet(petId) { /* Copy ruột releasePet */ }
+    const userId = localUser.uid; // Hoặc id tùy cách bạn lưu
 
-// --- KHỞI CHẠY PROFILE ---
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('stat-total')) fetchStats();
+    // 2. Kiểm tra các Element tồn tại trước khi chạy logic tương ứng
+    const hasProfileId = document.getElementById('p-id');
+    const hasStats = document.getElementById('stat-total');
 
-    if (document.getElementById('p-id')) {
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user) {
-            // (Copy toàn bộ khối logic nạp thông tin user, updateProgressBar ở mục C. TRANG PROFILE cũ vào đây)
-            // ...
-            
-            if (document.getElementById('profile-pets-list')) renderProfile();
-        } else {
-            window.location.assign('login.html'); 
-        }
+    if (hasProfileId) {
+        // Nạp thông tin cơ bản từ local trước cho nhanh
+        document.getElementById('p-id').innerText = localUser.username || "Player";
+        
+        // Sau đó mới fetch dữ liệu thực tế từ Server
+        await fetchStats(userId); 
+        await renderProfile(userId);
+        
+        // Nếu có hệ thống thú cưng sản xuất tài nguyên
+        if (typeof updateProduction === "function") updateProduction();
     }
 });
