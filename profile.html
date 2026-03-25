@@ -130,7 +130,25 @@
             </button>
         </div>
     </div>
+<div class="mt-8">
+    <div class="flex justify-between items-center mb-4 border-b dark:border-gray-700 pb-2">
+        <h3 class="font-black text-gray-700 dark:text-white uppercase text-sm italic">
+            <i class="fas fa-history mr-1 text-indigo-500"></i> Lịch sử báo cáo
+        </h3>
+        <span class="text-[10px] font-bold text-gray-400 uppercase">Gần đây</span>
+    </div>
+    
+    <div id="report-history-list" class="space-y-3 max-h-80 overflow-y-auto pr-1 custom-scrollbar">
+        <p class="text-center text-xs text-gray-400 py-4 italic">Chưa có lịch sử báo cáo nào...</p>
+    </div>
+</div>
 
+<style>
+    /* Làm đẹp thanh cuộn cho danh sách lịch sử */
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
+</style>
     <div id="editModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none z-50 transition-all duration-300">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-2xl w-full max-w-sm transform scale-90 transition-all duration-300 border dark:border-gray-700">
             <h2 class="text-xl font-black mb-4 dark:text-white uppercase italic">Cài đặt tài khoản</h2>
